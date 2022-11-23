@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>start blog on 邹沈韬</title>
+    <link>/categories/start-blog/</link>
+    <description>Recent content in start blog on 邹沈韬</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>备案信息</copyright>
+    <lastBuildDate>Wed, 23 Nov 2022 00:00:00 +0000</lastBuildDate><atom:link href="/categories/start-blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>将代码push到Github上的方法</title>
+      <link>/blog/git_push/</link>
+      <pubDate>Wed, 23 Nov 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/git_push/</guid>
+      <description>使用hugo命令 网站建设完成后 使用命令
+hugo 会在public文件下生成html文件
+使用git工具 在public文件夹下 使用命令
+git init git add . #将当前目录下修改的所有代码从工作区添加到暂存区 git commit -m &amp;#34;注释&amp;#34; #将缓存区内容添加到本地仓库 git push -u origin master #“-u”参数时，表示下次继续push的这个远端分支的时候 #推送命令就可以简写成“git push” 报错解决 1. &amp;ldquo;! [rejected] master -&amp;gt; master (fetch first)&amp;rdquo; 原因： github上的远程库与本地库版本不一致
+解决方法：
+将本地库强行覆盖远程库 git push -f 将远程库更新到本地库 git pull origin master 2. &amp;ldquo;Failed to connect to github.com port 443 after 21085 ms: Timed out&amp;rdquo; git config --global --unset http.proxy git config --global --unset https.</description>
+    </item>
+    
+    <item>
+      <title>我的第一篇博客</title>
+      <link>/blog/start_blog/</link>
+      <pubDate>Tue, 22 Nov 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/start_blog/</guid>
+      <description> Hugo Hugo是由Go语言实现的静态网站生成器。
+简单、易用、高效、易扩展、快速部署。
+工具 VScode
+步骤 安装hugo 配置环境变量 进入vscode 生成站点 下载主题 运行hugo 部署 </description>
+    </item>
+    
+  </channel>
+</rss>
