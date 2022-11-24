@@ -1,20 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Series on 邹沈韬</title>
+    <title>Series on Hustle</title>
     <link>/series/</link>
-    <description>Recent content in Series on 邹沈韬</description>
+    <description>Recent content in Series on Hustle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>备案信息</copyright><atom:link href="/series/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>A Spoonful of Hugo</title>
-      <link>/series/a-spoonful-of-hugo/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/series/a-spoonful-of-hugo/</guid>
-      <description></description>
-    </item>
-    
   </channel>
 </rss>

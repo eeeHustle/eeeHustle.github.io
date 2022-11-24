@@ -29,13 +29,31 @@
     <loc>/collection/day02/03-blogdown/</loc>
     <lastmod>2021-01-02T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/blog/</loc>
-    <lastmod>2022-11-23T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>/categories/</loc>
-    <lastmod>2022-11-23T00:00:00+00:00</lastmod>
+    <lastmod>2022-11-24T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/categories/electronic/</loc>
+    <lastmod>2022-11-24T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/</loc>
+    <lastmod>2022-11-24T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/tags/hustle-site/</loc>
+    <lastmod>2022-11-24T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/categories/power-electronic/</loc>
+    <lastmod>2022-11-24T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/tags/</loc>
+    <lastmod>2022-11-24T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/project/penguins/</loc>
+    <lastmod>2022-11-24T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/project/</loc>
+    <lastmod>2022-11-24T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/blog/</loc>
     <lastmod>2022-11-23T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/categories/start-blog/</loc>
@@ -50,22 +68,10 @@
     <loc>/collection/</loc>
     <lastmod>2021-01-26T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/talk/campfire/</loc>
-    <lastmod>2021-01-12T00:00:00+00:00</lastmod>
+    <loc>/talk/seedling/</loc>
+    <lastmod>2020-01-13T14:15:59-06:00</lastmod>
   </url><url>
     <loc>/talk/</loc>
-    <lastmod>2021-01-12T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/categories/workshop/</loc>
-    <lastmod>2021-01-12T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/talk/second-seedling/</loc>
-    <lastmod>2021-01-01T14:15:59-06:00</lastmod>
-  </url><url>
-    <loc>/categories/meetup/</loc>
-    <lastmod>2021-01-01T14:15:59-06:00</lastmod>
-  </url><url>
-    <loc>/talk/seedling/</loc>
     <lastmod>2020-01-13T14:15:59-06:00</lastmod>
   </url><url>
     <loc>/contact/</loc>
@@ -77,28 +83,14 @@
     <loc>/elements/</loc>
     <lastmod>2019-02-18T12:27:33-06:00</lastmod>
   </url><url>
-    <loc>/project/</loc>
-  </url><url>
-    <loc>/series/a-spoonful-of-hugo/</loc>
-  </url><url>
     <loc>/blog/spoonful-series/</loc>
   </url><url>
     <loc>/contributors/</loc>
   </url><url>
-    <loc>/tags/hugo-site/</loc>
-  </url><url>
     <loc>/license/</loc>
-  </url><url>
-    <loc>/categories/r/</loc>
   </url><url>
     <loc>/series/</loc>
   </url><url>
-    <loc>/tags/</loc>
-  </url><url>
-    <loc>/categories/theme-features/</loc>
-  </url><url>
     <loc>/about/</loc>
-  </url><url>
-    <loc>/powerelectroniccc/</loc>
   </url>
 </urlset>

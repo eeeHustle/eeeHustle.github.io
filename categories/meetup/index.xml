@@ -1,22 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>meetup on 邹沈韬</title>
+    <title>meetup on Hustle</title>
     <link>/categories/meetup/</link>
-    <description>Recent content in meetup on 邹沈韬</description>
+    <description>Recent content in meetup on Hustle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>备案信息</copyright>
-    <lastBuildDate>Fri, 01 Jan 2021 14:15:59 -0600</lastBuildDate><atom:link href="/categories/meetup/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>A seedling</title>
-      <link>/talk/second-seedling/</link>
-      <pubDate>Fri, 01 Jan 2021 14:15:59 -0600</pubDate>
-      
-      <guid>/talk/second-seedling/</guid>
-      <description></description>
-    </item>
-    
+    <lastBuildDate>Mon, 13 Jan 2020 14:15:59 -0600</lastBuildDate><atom:link href="/categories/meetup/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>A seedling</title>
       <link>/talk/seedling/</link>

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Hustle on 邹沈韬</title>
+    <title>Hustle</title>
     <link>/</link>
-    <description>Recent content in Hustle on 邹沈韬</description>
+    <description>Recent content on Hustle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>备案信息</copyright>
-    <lastBuildDate>Wed, 23 Nov 2022 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 24 Nov 2022 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Netlify</title>
       <link>/collection/day02/01-netlify/</link>
@@ -88,6 +88,16 @@ My content section is: collection My layout is: single-series part 2! does this 
     </item>
     
     <item>
+      <title>磁耦合谐振式无线电能传输</title>
+      <link>/project/penguins/</link>
+      <pubDate>Thu, 24 Nov 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/project/penguins/</guid>
+      <description>简介 无线电能传输（Wireless Power Transfer，WPT）是通过发射器将电能转化为其它形式的中继能量，如电磁场能、激光、微波及机械波等，隔空传输一段距离后，再通过接收器将中继能量转换为电能，实现电能无线传输。根据能量传输过程中，中继能量形式的不同，可分为磁（场）耦合式、电（场）耦合式、电磁辐射式和机械波耦合（超声波耦合）式。因传输功率大、效率高，磁耦合式无线电能传输应用较其它方式更为广泛。
+磁耦合无线电能传输包括磁耦合感应式无线电能传输（MCI-WPT）、磁耦合谐振式无线电能传输（MCR-WPT）和磁耦合双模无线电能传输（MCB-WPT）三种形式。其中，磁耦合双模无线电能传输是2015年提出的，其可以工作在磁耦合感应式无线电能传输和磁耦合谐振式无线电能传输两种模式下，兼具两种磁耦合无线电能传输优点。</description>
+    </item>
+    
+    <item>
       <title>将代码push到Github上的方法</title>
       <link>/blog/git_push/</link>
       <pubDate>Wed, 23 Nov 2022 00:00:00 +0000</pubDate>
@@ -111,24 +121,6 @@ git init git add . #将当前目录下修改的所有代码从工作区添加到
 简单、易用、高效、易扩展、快速部署。
 工具 VScode
 步骤 安装hugo 配置环境变量 进入vscode 生成站点 下载主题 运行hugo 部署 </description>
-    </item>
-    
-    <item>
-      <title>A campfire</title>
-      <link>/talk/campfire/</link>
-      <pubDate>Tue, 12 Jan 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/talk/campfire/</guid>
-      <description>I&amp;rsquo;m really excited to give this talk! Stay tuned for video and slides.</description>
-    </item>
-    
-    <item>
-      <title>A seedling</title>
-      <link>/talk/second-seedling/</link>
-      <pubDate>Fri, 01 Jan 2021 14:15:59 -0600</pubDate>
-      
-      <guid>/talk/second-seedling/</guid>
-      <description></description>
     </item>
     
     <item>
@@ -186,15 +178,6 @@ Allison Horst 🐕 (awesome illustrations of campfires, seedlings, and evergreen
       
       <guid>/license/</guid>
       <description>My blog posts are released under a Creative Commons Attribution-ShareAlike 4.0 International License.</description>
-    </item>
-    
-    <item>
-      <title>电力电子知识</title>
-      <link>/powerelectroniccc/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/powerelectroniccc/</guid>
-      <description></description>
     </item>
     
   </channel>
