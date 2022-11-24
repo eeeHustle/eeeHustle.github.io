@@ -10,10 +10,10 @@
     <lastBuildDate>Thu, 24 Nov 2022 00:00:00 +0000</lastBuildDate><atom:link href="/categories/electronic/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>磁耦合谐振式无线电能传输</title>
-      <link>/project/penguins/</link>
+      <link>/project/wpt/</link>
       <pubDate>Thu, 24 Nov 2022 00:00:00 +0000</pubDate>
       
-      <guid>/project/penguins/</guid>
+      <guid>/project/wpt/</guid>
       <description>简介 无线电能传输（Wireless Power Transfer，WPT）是通过发射器将电能转化为其它形式的中继能量，如电磁场能、激光、微波及机械波等，隔空传输一段距离后，再通过接收器将中继能量转换为电能，实现电能无线传输。根据能量传输过程中，中继能量形式的不同，可分为磁（场）耦合式、电（场）耦合式、电磁辐射式和机械波耦合（超声波耦合）式。因传输功率大、效率高，磁耦合式无线电能传输应用较其它方式更为广泛。
 磁耦合无线电能传输包括磁耦合感应式无线电能传输（MCI-WPT）、磁耦合谐振式无线电能传输（MCR-WPT）和磁耦合双模无线电能传输（MCB-WPT）三种形式。其中，磁耦合双模无线电能传输是2015年提出的，其可以工作在磁耦合感应式无线电能传输和磁耦合谐振式无线电能传输两种模式下，兼具两种磁耦合无线电能传输优点。</description>
     </item>
