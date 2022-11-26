@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>hugo-site on Hustle</title>
-    <link>/tags/hugo-site/</link>
-    <description>Recent content in hugo-site on Hustle</description>
+    <title>专利撰写 on Hustle</title>
+    <link>/blog/patent-series/</link>
+    <description>Recent content in 专利撰写 on Hustle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>备案信息</copyright>
-    <lastBuildDate>Fri, 25 Nov 2022 00:00:00 +0000</lastBuildDate><atom:link href="/tags/hugo-site/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 25 Nov 2022 00:00:00 +0000</lastBuildDate><atom:link href="/blog/patent-series/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>【专利】简介</title>
       <link>/blog/patent-series/introduction/introduction/</link>
@@ -83,15 +83,6 @@ S3，…
 在此说明了此发明的优选实施例，包括发明人用于实施本发明的已知最佳模式。优选实施例的变更对本领域普通技术人员而言在阅读上述说明后是显而易见的。发明人希望普通技术人员合理应用这样的变更，并且发明人认为与在此明确说明不同的应用也可以实现本发明。因此，本发明包括随附权利要求中所引用的主旨的所有修改及等效形式，这在适用的法律中是允许的。此外，上述要素的所有可能的变更的任何组合也被本发明所包含，除非在此另外指出或者在上下文中明显矛盾。
 需要说明的是，在本文中，术语“包括”、“包含”或者其任何其他变体意在涵盖非排他性的包含，从而使得包括一系列要素的过程、方法、物品或者设备不仅包括那些要素，而且还包括没有明确列出的其他要素，或者是还包括为这种过程、方法、物品或者设备所固有的要素。
 本文中应用了具体个例对本发明的原理及实施方式进行了阐述，以上实例的说明只是用于帮助理解本发明的方法及其核心思想。以上所述仅是本发明的优选实施方式，应当指出，由于文字表达的有限性，而客观上存在无限的具体结构，对于本技术领域的普通技术人员来说，在不脱离本发明原理的前提下，还可以做出若干改进、润饰或变化，也可以将上述技术特征以适当的方式进行组合；这些改进润饰、变化或组合，或未经改进将发明的构思和技术方案直接应用于其它场合的，均应视为本发明的保护范围。</description>
-    </item>
-    
-    <item>
-      <title>专利撰写</title>
-      <link>/blog/patent-series/</link>
-      <pubDate>Fri, 25 Nov 2022 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/patent-series/</guid>
-      <description>** No content below YAML for the series _index. This file is a leaf bundle, and provides settings for the listing page layout and sidebar content.**</description>
     </item>
     
   </channel>

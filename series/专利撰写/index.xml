@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>hugo-site on Hustle</title>
-    <link>/tags/hugo-site/</link>
-    <description>Recent content in hugo-site on Hustle</description>
+    <title>专利撰写 on Hustle</title>
+    <link>/series/%E4%B8%93%E5%88%A9%E6%92%B0%E5%86%99/</link>
+    <description>Recent content in 专利撰写 on Hustle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>备案信息</copyright>
-    <lastBuildDate>Fri, 25 Nov 2022 00:00:00 +0000</lastBuildDate><atom:link href="/tags/hugo-site/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 25 Nov 2022 00:00:00 +0000</lastBuildDate><atom:link href="/series/%E4%B8%93%E5%88%A9%E6%92%B0%E5%86%99/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>【专利】简介</title>
       <link>/blog/patent-series/introduction/introduction/</link>

@@ -45,9 +45,43 @@
     
   <meta itemprop="name" content="磁耦合谐振式无线电能传输">
 <meta itemprop="description" content="简介 无线电能传输（Wireless Power Transfer，WPT）是通过发射器将电能转化为其它形式的中继能量，如电磁场能、激光、微波及机械波等，隔空传输一段距离后，再通过接收器将中继能量转换为电能，实现电能无线传输。根据能量传输过程中，中继能量形式的不同，可分为磁（场）耦合式、电（场）耦合式、电磁辐射式和机械波耦合（超声波耦合）式。因传输功率大、效率高，磁耦合式无线电能传输应用较其它方式更为广泛。
-磁耦合无线电能传输包括磁耦合感应式无线电能传输（MCI-WPT）、磁耦合谐振式无线电能传输（MCR-WPT）和磁耦合双模无线电能传输（MCB-WPT）三种形式。其中，磁耦合双模无线电能传输是2015年提出的，其可以工作在磁耦合感应式无线电能传输和磁耦合谐振式无线电能传输两种模式下，兼具两种磁耦合无线电能传输优点。"><meta itemprop="datePublished" content="2022-11-24T00:00:00+00:00" />
+磁耦合无线电能传输包括磁耦合感应式无线电能传输（MCI-WPT）、磁耦合谐振式无线电能传输（MCR-WPT）和磁耦合双模无线电能传输（MCB-WPT）三种形式。其中，磁耦合双模无线电能传输是2015年提出的，其可以工作在磁耦合感应式无线电能传输和磁耦合谐振式无线电能传输两种模式下，兼具两种磁耦合无线电能传输优点。
+MOS失效机理 热击穿 过热过压过流都是导致mos管失效的原因
+保持GS电压在适当的值 让mos工作在电阻区而非线性区 防止因过热而击穿
+雪崩能力、反向恢复电流、位移电流 雪崩电流、位移电流、反向恢复电流图示
+此三种电流路径相似 为图中黄色和蓝色箭头所示
+雪崩能力 当向MOSFET施加高于绝对最大额定值BVDSS的电压时，就会发生击穿。当施加高于BVDSS的高电场时，自由电子被加速并带有很大的能量。这会导致碰撞电离，从而产生电子-空穴对。这种电子-空穴对呈雪崩式增加的现象称为“雪崩击穿”。在这种雪崩击穿期间，与 MOSFET内部二极管电流呈反方向流动的电流称为“雪崩电流IAS”，参见下图
+雪崩能力=min{ 雪崩电流，雪崩能量 ****}
+$I$AS使MOS短路失效（雪崩电流）
+如上图所示，虽然P&#43;body和n&#43;都连在source上 但是P&#43;body浓度有限 有小分布电阻 IAS会流经MOSFET的基极寄生电阻RB。寄生双极型晶体管的基极和发射极之间会产生电位差VBE，如果该电位差较大，则寄生双极晶体管可能会变为导通状态导致MOS短路失效
+$E$AS热量造成的失效 （雪崩能量）
+如前所述，当MOSFET处于击穿状态时会流过雪崩电流。在这种状态下，BVDSS被施加到MOSFET并且流过雪崩电流，它们的乘积成为功率损耗。这种功率损耗称为“雪崩能量EAS”。雪崩测试电路及其测试结果的波形如下图。雪崩能量可以通过公式（1）来表示。
+例：EAR=45mJ，若电压为VDS=900V，IAR=7.5A，则反复流过的脉冲电流宽度t=EA/(VDS**IAR)= 45mJ/(900V*7.5A)=6.7us。也就是说，如果在工作时流过的脉冲电流宽度t=6.7us的话，就能承受7.5A的反复雪崩电流。
+位移电流（dV/dt失效） dV/dt失效的三种原因
+由于MOS关断时流经寄生电容Cds的瞬态充电电流流过基极电阻RB，导致寄生双极晶体管的基极和发射极之间产生电位差Vbe，使寄生双极晶体管导通，造成短路失效。通常，dV/dt越大（越陡），VBE的电位差就越大，寄生双极晶体管越容易导通，从而越容易发生失效问题。
+在逆变器电路或Totem-Pole PFC等上下桥结构的电路中，反向恢复电流Irr会流过MOSFET。受该反向恢复电流影响的dV/dt，可能会使寄生双极晶体管误导通。dV/dt失效与反向恢复特性之间的关系可以通过双脉冲测试来确认。
+高dV/dt下，流经Cgd的瞬态充电电流经过GS两端电阻 导致GS产生点位的尖峰 导致开关管误导通 所以不考虑驱动的阻抗下 希望Cgd与Cgs比值较小
+解决方法
+1.在GS间增加电容也就是减小了这两个公式的比值如下公式 分担了米勒电容产生的门极充电电流 但会影响开关性能
+2.用负压关断
+3.加三极管有源钳位
+4.合适的栅极电阻
+反向恢复电流 在比较高的电压或者电压还未建立起来的时候与雪崩电流类似
+反向恢复电流和位移电流叠加不能使二极管误导通 所以二极管dV/dt比mos管本体能力要弱
+脉冲电流 脉冲电流的限制因素
+双脉冲测试 双脉冲测试意义 对比不同开关管参数及性能，同时可以获取开关管开关过程中的参数，评估驱动电阻数值是否合适，是否需要吸收电路等。而且可以考量开关管在实际电路中的实际表现，反向恢复电流，关断电压尖峰，开通关断时间等。
+各项动态参数（td(on)、tr、td(off)、tf、Eon、Eoff 等）
+栅极波形，评估驱动板是否能为开关管开启提供足够的驱动电流、
+获取开关管在开通、关断过程的主要参数，以评估Rgon与Rgoff的选择是否合适
+观察开通、关断过程是否有电压尖峰，评估实际应用是否需要吸收电路
+评估二极管的反向恢复行为和安全裕量；
+测量母排的杂散电感
+双脉冲测试的原理 双脉冲测试通常以半桥形式测试，所谓双脉冲就是上管持续关断，下管驱动信号给定两个脉冲从而测试下管的开关特性。如下图，上管两端并接一个电感，这里主要测试的就是下管的开关特性以及上管的反向二极管特性。
+半桥测试原理图
+基本波形
+各时刻分析"><meta itemprop="datePublished" content="2022-11-24T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2022-11-24T00:00:00+00:00" />
-<meta itemprop="wordCount" content="5"><meta itemprop="image" content="/project/wpt/featured1.jpg">
+<meta itemprop="wordCount" content="190"><meta itemprop="image" content="/project/wpt/featured1.jpg">
 <meta itemprop="keywords" content="hustle-site," />
   
   
@@ -65,7 +99,7 @@
   <script src="/main.min.62a7f7a2d29d031897400ce35bc7c72bc953d24fa1193bee8f97864113de8c74.js" type="text/javascript"></script>
 </head>
 <body>
-      <div class="grid-container single-sidebar">
+      <div class="grid-container single">
 <header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
   <nav class="site-nav db dt-l w-100" role="navigation">
     <a class="site-brand db dtc-l v-mid link no-underline w-100 w-33-l tc tl-l" href="/" title="Home">
@@ -95,13 +129,13 @@
 
 <main class="page-main pa4" role="main">
   <section class="page-content mw7 center">
-    <article class="post-content pa0 pr3-l">
+    <article class="post-content pa0 ph4-l">
       <header class="post-header">
         <h1 class="f1 lh-solid measure-narrow mb3 fw4">磁耦合谐振式无线电能传输</h1>
         <h4 class="f4 mt0 mb4 lh-title measure">Magnetically-Coupled Resonant Wireless Power Transfer</h4>
-        <p class="f6 measure lh-copy mv1">By Hustle in <a href="/categories/electronic">Electronic</a>  <a href="/categories/power-electronic">Power Electronic</a> </p>
+        <p class="f6 measure lh-copy mv1">By Hustle in <a href="/categories/%E7%94%B5%E5%8A%9B%E7%94%B5%E5%AD%90">电力电子</a>  <a href="/categories/%E7%94%B5%E5%AD%90">电子</a>  <a href="/categories/wpt">WPT</a> </p>
         <p class="f7 db mv0 ttu">November 24, 2022</p>
-        
+
       
       <div class="ph0 pt5">
         
@@ -134,7 +168,7 @@
 
       </div>
       
-      
+
       </header>
       <section class="post-body pt5 pb4">
         
@@ -149,6 +183,416 @@
 </h2>
 <p>无线电能传输（Wireless Power Transfer，WPT）是通过发射器将电能转化为其它形式的中继能量，如电磁场能、激光、微波及机械波等，隔空传输一段距离后，再通过接收器将中继能量转换为电能，实现电能无线传输。根据能量传输过程中，中继能量形式的不同，可分为磁（场）耦合式、电（场）耦合式、电磁辐射式和机械波耦合（超声波耦合）式。因传输功率大、效率高，磁耦合式无线电能传输应用较其它方式更为广泛。</p>
 <p>磁耦合无线电能传输包括磁耦合感应式无线电能传输（MCI-WPT）、磁耦合谐振式无线电能传输（MCR-WPT）和磁耦合双模无线电能传输（MCB-WPT）三种形式。其中，磁耦合双模无线电能传输是2015年提出的，其可以工作在磁耦合感应式无线电能传输和磁耦合谐振式无线电能传输两种模式下，兼具两种磁耦合无线电能传输优点。</p>
+
+
+
+
+<h1 id="mos失效机理">MOS失效机理
+  <a href="#mos%e5%a4%b1%e6%95%88%e6%9c%ba%e7%90%86"></a>
+</h1>
+
+
+
+
+<h2 id="热击穿">热击穿
+  <a href="#%e7%83%ad%e5%87%bb%e7%a9%bf"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>过热过压过流都是导致mos管失效的原因</p>
+<p>保持GS电压在适当的值 让mos工作在电阻区而非线性区 防止因过热而击穿</p>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/025d73a9-d066-4c39-8b31-c5810ac02aeb/Untitled.png" alt="Untitled"></p>
+
+
+
+
+<h2 id="雪崩能力反向恢复电流位移电流"><strong>雪崩能力、反向恢复电流、位移电流</strong>
+  <a href="#%e9%9b%aa%e5%b4%a9%e8%83%bd%e5%8a%9b%e5%8f%8d%e5%90%91%e6%81%a2%e5%a4%8d%e7%94%b5%e6%b5%81%e4%bd%8d%e7%a7%bb%e7%94%b5%e6%b5%81"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<ul>
+<li>
+<p><strong>雪崩电流、位移电流、反向恢复电流图示</strong></p>
+<p>此三种电流路径相似 为图中黄色和蓝色箭头所示</p>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b581bb97-8a81-4359-b79d-31773bf654ea/Untitled.png" alt="Untitled"></p>
+</li>
+</ul>
+
+
+
+
+<h3 id="雪崩能力">雪崩能力
+  <a href="#%e9%9b%aa%e5%b4%a9%e8%83%bd%e5%8a%9b"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>当向MOSFET施加高于绝对最大额定值BVDSS的电压时，就会发生击穿。当施加高于BVDSS的高电场时，自由电子被加速并带有很大的能量。这会导致碰撞电离，从而产生电子-空穴对。这种电子-空穴对呈雪崩式增加的现象称为“雪崩击穿”。在这种雪崩击穿期间，与 MOSFET内部二极管电流呈反方向流动的电流称为“雪崩电流IAS”，参见下图</p>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/07ebcb45-c577-439d-a513-1713555ee7b7/Untitled.png" alt="Untitled"></p>
+<p>雪崩能力=min{ 雪崩电流，雪崩能量 ****}</p>
+<p>$I$AS<strong>使MOS短路失效（雪崩电流）</strong></p>
+<p>如上图所示，虽然P+body和n+都连在source上 但是P+body浓度有限  有小分布电阻 IAS会流经MOSFET的基极寄生电阻RB。寄生双极型晶体管的基极和发射极之间会产生电位差VBE，如果该电位差较大，则寄生双极晶体管可能会变为导通状态导致MOS短路失效</p>
+<p>$E$AS<strong>热量造成的失效 （雪崩能量）</strong></p>
+<p>如前所述，当MOSFET处于击穿状态时会流过雪崩电流。在这种状态下，BVDSS被施加到MOSFET并且流过雪崩电流，它们的乘积成为功率损耗。这种功率损耗称为“雪崩能量EAS”。雪崩测试电路及其测试结果的波形如下图。雪崩能量可以通过公式（1）来表示。</p>
+<p>例：EAR=45mJ，若电压为VDS=900V，IAR=7.5A，则反复流过的脉冲电流宽度t=EA/(VDS**IAR)= 45mJ/(900V*7.5A)=6.7us。也就是说，如果在工作时流过的脉冲电流宽度t=6.7us的话，就能承受7.5A的反复雪崩电流。</p>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/3353768c-ec9d-4ad6-a0cf-55e1dccac568/Untitled.png" alt="Untitled"></p>
+
+
+
+
+<h3 id="位移电流dvdt失效">位移电流（<strong>dV/dt失效）</strong>
+  <a href="#%e4%bd%8d%e7%a7%bb%e7%94%b5%e6%b5%81dvdt%e5%a4%b1%e6%95%88"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/9570b8d5-6290-4b0f-ab4f-a54e740f7004/Untitled.png" alt="Untitled"></p>
+<p><strong>dV/dt失效的三种原因</strong></p>
+<ol>
+<li>
+<p>由于MOS关断时流经寄生电容Cds的瞬态充电电流流过基极电阻RB，导致寄生双极晶体管的基极和发射极之间产生电位差Vbe，使寄生双极晶体管导通，造成短路失效。通常，dV/dt越大（越陡），VBE的电位差就越大，寄生双极晶体管越容易导通，从而越容易发生失效问题。</p>
+</li>
+<li>
+<p>在逆变器电路或Totem-Pole PFC等上下桥结构的电路中，反向恢复电流Irr会流过MOSFET。受该反向恢复电流影响的dV/dt，可能会使寄生双极晶体管误导通。dV/dt失效与反向恢复特性之间的关系可以通过双脉冲测试来确认。</p>
+</li>
+<li>
+<p>高dV/dt下，流经Cgd的瞬态充电电流经过GS两端电阻 导致GS产生点位的尖峰 导致开关管误导通 所以不考虑驱动的阻抗下 希望Cgd与Cgs比值较小</p>
+<p><strong>解决方法</strong></p>
+<p>1.在GS间增加电容也就是减小了这两个公式的比值如下公式 分担了米勒电容产生的门极充电电流 但会影响开关性能</p>
+<p>2.用负压关断</p>
+<p>3.加三极管有源钳位</p>
+<p>4.合适的栅极电阻</p>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/de6ee02c-aa16-4b87-902d-17d3f965bce7/Untitled.png" alt="Untitled"></p>
+</li>
+</ol>
+
+
+
+
+<h3 id="反向恢复电流">反向恢复电流
+  <a href="#%e5%8f%8d%e5%90%91%e6%81%a2%e5%a4%8d%e7%94%b5%e6%b5%81"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>在比较高的电压或者电压还未建立起来的时候与雪崩电流类似</p>
+<p>反向恢复电流和位移电流叠加不能使二极管误导通  所以二极管dV/dt比mos管本体能力要弱</p>
+
+
+
+
+<h3 id="脉冲电流">脉冲电流
+  <a href="#%e8%84%89%e5%86%b2%e7%94%b5%e6%b5%81"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>脉冲电流的限制因素</p>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/c96ed352-d78a-4e03-a681-9588f5300c1c/Untitled.png" alt="Untitled"></p>
+
+
+
+
+<h2 id="双脉冲测试">双脉冲测试
+  <a href="#%e5%8f%8c%e8%84%89%e5%86%b2%e6%b5%8b%e8%af%95"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+
+
+
+
+<h3 id="双脉冲测试意义">双脉冲测试意义
+  <a href="#%e5%8f%8c%e8%84%89%e5%86%b2%e6%b5%8b%e8%af%95%e6%84%8f%e4%b9%89"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>对比不同开关管参数及性能，同时可以获取开关管开关过程中的参数，评估驱动电阻数值是否合适，是否需要吸收电路等。而且可以考量开关管在实际电路中的实际表现，反向恢复电流，关断电压尖峰，开通关断时间等。</p>
+<ul>
+<li>
+<p>各项动态参数（td(on)、tr、td(off)、tf、Eon、Eoff 等）</p>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/2b54b039-a8a8-4a08-af1e-7ec3a6ff192b/Untitled.png" alt="Untitled"></p>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a1394f83-bfd6-4c2e-bda0-ce952e0f5f49/Untitled.png" alt="Untitled"></p>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/0049d6cb-ff58-422e-95b0-2e7e55906305/Untitled.png" alt="Untitled"></p>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/95a89022-bba6-4a5e-b58d-2c617db119ba/Untitled.png" alt="Untitled"></p>
+</li>
+</ul>
+<p>栅极波形，评估驱动板是否能为开关管开启提供足够的驱动电流、</p>
+<p>获取开关管在开通、关断过程的主要参数，以评估Rgon与Rgoff的选择是否合适</p>
+<p>观察开通、关断过程是否有电压尖峰，评估实际应用是否需要吸收电路</p>
+<p>评估二极管的反向恢复行为和安全裕量；</p>
+<p>测量母排的杂散电感</p>
+
+
+
+
+<h3 id="双脉冲测试的原理"><strong><strong>双脉冲测试的原理</strong></strong>
+  <a href="#%e5%8f%8c%e8%84%89%e5%86%b2%e6%b5%8b%e8%af%95%e7%9a%84%e5%8e%9f%e7%90%86"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>双脉冲测试通常以半桥形式测试，所谓双脉冲就是上管持续关断，下管驱动信号给定两个脉冲从而测试下管的开关特性。如下图，上管两端并接一个电感，这里主要测试的就是下管的开关特性以及上管的反向二极管特性。</p>
+<ul>
+<li>
+<p>半桥测试原理图</p>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/df8333d3-c33f-4762-bb90-170d2855d4c0/Untitled.png" alt="Untitled"></p>
+</li>
+<li>
+<p>基本波形</p>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/bef6aa85-a6e8-4331-9705-d4db254aae0d/Untitled.png" alt="Untitled"></p>
+</li>
+<li>
+<p>各时刻分析</p>
+<p><em><strong>第一阶段</strong></em></p>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/61f4c74d-a219-40a5-b840-36e3c29e16f1/Untitled.png" alt="Untitled"></p>
+<p>在t0­时刻，门极放出第一个脉冲，开关管饱和导通，电感电流线性上升，电流公式如下，t1时刻电流值最大，由时间t1决定电流大小。</p>
+<p>$$
+I = \frac{U*t}{L}
+$$</p>
+<p><em><strong>第二阶段</strong></em></p>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/caff4e22-0a03-44e9-8e5f-6c11ac525afd/Untitled.png" alt="Untitled"></p>
+<p>在t1时刻，被测开关管关断，电感电流由上管二极管续流，电流波形如虚线所示，此电流一般不容易检测。</p>
+<p><em><strong>第三阶段</strong></em></p>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/9b47debb-3397-4053-b6ac-2eb78d506969/Untitled.png" alt="Untitled"></p>
+<p>在t3时刻，开关管关断，此时电流较大由于母线杂散电感的存在，电压会出现尖峰</p>
+</li>
+<li>
+<p>波形实例</p>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/ca897a07-4d5f-4331-9162-be2ae8b1840d/Untitled.png" alt="Untitled"></p>
+</li>
+<li>
+<p>全桥测试原理图</p>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/eb490790-b521-42a7-8bec-c06db8a3eab0/Untitled.png" alt="Untitled"></p>
+<p>考虑到可能的电场干扰，最佳的双脉冲平台是全桥结构的。3管的门极给15V常开信号，4管则是处于常关，2管作为被测器件给予双脉冲信号。1管主要作用于续流，所以门极可以是常关信号，或者在使用MOS管时门极用同步整流信号。第1个脉冲来临时，电流经过3管和负载电感进入2管。为了得到一个期望的电流值，此脉冲需持续一定时长，时长可通过T=I*L/V来获得，其中L是负载电感值，I是期望电流，V是母线电压。当然实际中可以直接用示波器观察电流值来调整脉宽。</p>
+<p>波形与半桥类似</p>
+<p>第一个脉冲结束时，2管关断，表现出器件的关断波形。此后，电流在3管、负载和1管中续流。当第2个脉冲到来时，2管开通，1管上的电流重新流入2管，这时可测量1管的反向恢复特性及2管的开通特性。其中电流的获取在小功率时可以采用电流检测电阻，而大电流时一般使用磁性电流检测器，比如罗氏线圈或者Pearson磁环。</p>
+</li>
+<li>
+<p>电压探头要求</p>
+<p><strong>最大电压限制</strong></p>
+<p>最大电压限制即电压探头所能测量的最大电压。超过的话不仅会损坏探头本身，还可能会导致IGBT损毁。这个数值一般会在电压探头上直接标出。最大电压限制有最大差模电压与最大共模电压的区分。差模电压即探头的正负测试点之间的电压，而共模电压指正和负测试点对地的电压。图1(1)中的探头共模最大电压是2500V，差模最大电压是5000V，图1(2)中探头差模和共模的最大电压都是5000V。当需要测量一个对地是3000V直流母线的系统时就要选择图1(2)的探头，因为图1(1)左边的对地电压只有2500V。</p>
+<p><strong>探头测量带宽</strong></p>
+<p>探头的带宽是指导致探头响应输出幅度下降到70.7%(-3dB)的频率。探头的带宽或上升时间要等于最好优于被测信号的带宽。由于IGBT器件工作在开关状态，每一次的开关过程都伴随着快速变化的dv/dt。而信号的上升时间和对应的带宽的公式为BW=350/tr，其中BW的单位是MHz，tr是被测信号10%~90%的变化时间，单位是ns。比如说IGBT的母线电压是600V，dv/dt是3000V/μs，那么这个VCE的上升时间tr就是160ns，理论上需要的带宽为2.2MHz。一般高压差分探头虽然标称100MHz，但其实是指在小电压值测量下可达到的最高带宽。当进行几百伏的电压测量时带宽是会变小的，如图3所示。当测到600V的电压时，探头实际的单宽能力其实只有2M都不到，无法准确地进行上诉例子的动态电压测量。所以，不仅要选择具有一定带宽的电压探头，还要考虑它在高压测量时的带宽衰减。无源单端探头的带宽往往比差分探头高不少，各个品牌型号的探头也千差万别，因此在测量IGBT开关特性，一定要根据被测的IGBT电压值以及dv/dt的最大值挑选带宽合适的电压探头</p>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/38d22f39-48eb-4532-9f8f-6272a928f128/Untitled.png" alt="                                                  高压差分探头的电压带宽曲线"></p>
+<pre><code>                                                高压差分探头的电压带宽曲线
+</code></pre>
+</li>
+<li>
+<p>电流探头要求</p>
+<ul>
+<li>
+<p><strong>CT探头与柔性探头</strong></p>
+<ul>
+<li>
+<p>**从使用便利性角度来说，**柔性的探头可介入性好些。针对已经存在的电路可方便地进行电流测量。而CT由于电流环无法打开，往往需要先安置电流探头在连接电路。</p>
+</li>
+<li>
+<p>**从电源适配来看，**CT一般不需要增加额外的电源，可直接和示波器相连。而柔性探头因为有积分器的存在一般都需要外加电源或者使用电池。</p>
+</li>
+<li>
+<p>**从测量带宽上讲，**CT产品能覆盖的频带相对柔性探头来说多一些，在高速IGBT测量中特别有优势。</p>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/8f92dcfa-2a05-45f8-8eaa-c754f0de2b3f/Untitled.png" alt="柔性探头"></p>
+<p>柔性探头</p>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/31a01c15-3ba5-4fe0-a37b-83d95ba7dfa9/Untitled.png" alt="CT探头"></p>
+<p>CT探头</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>探头延时问题解决</strong></p>
+<p>不同类型的电流探头有不同的延时参数，而且相对于不同的电压探头也有不一样的延时。这无关电流探头性能好坏的评价，但却对计算开关损耗有一定的影响。</p>
+<p><strong>延时是可以校准的</strong>，具体方法是在IGBT的开通时，把电压的下降点和电流的上升点调在同一个时间点上，如图2黑线所示，蓝色代表VCE，红色代表IC。因为理想状态下IGBT需要在换流结束后CE电压才会减小，但实际电路中由于有系统母排杂散电感的存在，C、E电压会在IGBT桥臂有di/dt时就开始下降了。如果实测中CE电压下降的位置与IC电流上升的位置不在同一个时间点，说明电压探头与电流探头的时间延迟不一致，需要校准。</p>
+<p>需要说明的是，这种校准并非绝对精度的校准，而是使电压探头和电流探头同步的相对意义的上校准。在实际工程应用中，这种方法非常方便且易于操作。</p>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/75ca03d3-f12f-4db5-aabf-e1b9f4cca414/Untitled.png" alt="Untitled"></p>
+</li>
+<li>
+<p><strong>带宽要求</strong></p>
+<p>选择电流探头不仅要看量测范围，还要关注带宽。往往测量大电流的探头，带宽会相对小些；而探头规格书里标的是最大带宽，又不一定涵盖最大电流。</p>
+<p>其实在测量的时候是可以发现电流带宽不足这件事的。请看图3中a,b两个波形图，红色的是电流。a图中使用的电流探头的tr=100ns，而90%I~10%IC之间的时间为28.2ns，小于探头本身标称值，出现电流失真，影响损耗的测量。图b中使用的电流探头的tr=25ns，90%~10%IC之间的时间为48.6ns，大于探头本身标称值，符合测量要求。从波形轮廓上看没有振铃现象。上升时间小的探头带宽高。</p>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/74dfa858-26bb-4028-9a9c-7e022cf571c0/Untitled.png" alt="                                 （a)"></p>
+<pre><code>                               （a)
+</code></pre>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/70b591bb-3409-47f5-a953-28ec2391960f/Untitled.png" alt="                                    (b)"></p>
+<pre><code>                                  (b)
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>双脉冲测试时的问题</strong></p>
+<ul>
+<li>要想获得较为精确的测量值，对测试仪器有很大要求。一般采用高压探头取VceVce，罗氏线圈电流探头取IcIc，对于驱动信号可以采用普通探头获得。同时，有条件的情况下，可以对高压探头，罗氏线圈/高精度电流探头进行校准，以此减小测量仪器带来的误差</li>
+<li>调整门极电阻Rgon可以强烈地影响该过程，用以确定Rgon的数值是否合适。</li>
+<li>负载电感可以自己绕制空心电感，或者购买相应空心电感，尽量不用使用磁粉芯电感，瞬间大电流会影响粉心电感电感值，从而对测试结果造成影响。</li>
+<li>直流侧需要高压电源，一般情况下，为保护仪器，可以用多个电容串并联（同时并联电阻用于放电），使用高压电源为电容充电，然后给被测电路供电。</li>
+<li>双脉冲信号可以用DSP或者其他信号发生器产生，测试前需使用示波器观察发生的信号脉冲时间是否与预期相同，这个会影响对结果分析与判断。</li>
+</ul>
+</li>
+</ul>
+
+
+
+
+<h2 id="雪崩电流测试">雪崩电流测试
+  <a href="#%e9%9b%aa%e5%b4%a9%e7%94%b5%e6%b5%81%e6%b5%8b%e8%af%95"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>高温时Rb变高 尽量在高温下测试</p>
+
+
+
+
+<h3 id="雪崩能力测试电路">雪崩能力测试电路
+  <a href="#%e9%9b%aa%e5%b4%a9%e8%83%bd%e5%8a%9b%e6%b5%8b%e8%af%95%e7%94%b5%e8%b7%af"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/2b5fee46-713f-4e2f-aaf7-2faeb195a6f5/Untitled.png" alt="Untitled"></p>
+
+
+
+
+<h3 id="雪崩能量和初始结温以及电流的关系">雪崩能量和初始结温以及电流的关系
+  <a href="#%e9%9b%aa%e5%b4%a9%e8%83%bd%e9%87%8f%e5%92%8c%e5%88%9d%e5%a7%8b%e7%bb%93%e6%b8%a9%e4%bb%a5%e5%8f%8a%e7%94%b5%e6%b5%81%e7%9a%84%e5%85%b3%e7%b3%bb"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/1d387108-43d7-4d5e-8856-9c61fcda91b0/Untitled.png" alt="Untitled"></p>
+
+
+
+
+<h2 id="米勒效应">米勒效应
+  <a href="#%e7%b1%b3%e5%8b%92%e6%95%88%e5%ba%94"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+
+
+
+
+<h3 id="公式推导">公式推导
+  <a href="#%e5%85%ac%e5%bc%8f%e6%8e%a8%e5%af%bc"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/0b20afa8-96d6-4856-9e6f-0efb9c68fcaf/Untitled.png" alt="Untitled"></p>
+<p>利用式I=C×dV/dt</p>
+<p>可得到： I1=Cgd×d(Vgs-Vds)/dt=Cgd×(dVgs/dt-dVds/dt)     ①</p>
+<pre><code>            I2=Cgs×d(Vgs/dt)                                                     ②
+</code></pre>
+<p>如果在MOSFET上施加栅-源电压Vgs，其漏-源电压Vds就会下降(即使是呈非线性下降)。因此，可以将连接这两个电压的负增益定义为 Av=- Vds/Vgs  ③</p>
+<p>将式③代入式②中，可得：         I1=Cgd×(1+Av)dVgs/dt</p>
+<p>在转换(导通或关断)过程中，栅-源极的总等效电容Ceq为：</p>
+<p>Igate=I1+I2=(<strong>Cgd×(1+Av)+Cgs</strong>)×dVgs/dt=<strong>Ceq</strong>×dVgs/dt    ④</p>
+<p>式中(1+Av)这一项被称作米勒效应，它描述了电子器件中输出和输入之间的电容反馈。<strong>当gd间电压接近于零时，将产生米勒效应</strong>。</p>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/4d842ac0-59c0-4434-903f-6794ad7517b9/Untitled.png" alt="Untitled"></p>
+
+
+
+
+<h3 id="米勒平台及mos开通过程">米勒平台及MOS开通过程
+  <a href="#%e7%b1%b3%e5%8b%92%e5%b9%b3%e5%8f%b0%e5%8f%8amos%e5%bc%80%e9%80%9a%e8%bf%87%e7%a8%8b"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a660b629-36a5-4cdb-8b8a-7498b4bdd162/Untitled.png" alt="Untitled"></p>
+<p><strong>t0~t1</strong>  Vgs小于Vgs(th)时,MOS管处于截止区关断,Id=0,漏源极电压差Vds为输入电压Vin。</p>
+<p><strong>t1~t2</strong> 随着Vgs从Vgs(th)逐渐增大至米勒平台电压Vp，Id从0开始逐渐增大至最大值，MOS管开始导通，并进入恒流区（饱和区）。此时Vds仍旧维持不变，但是实际电路中可能会由于各种杂散寄生电感等因素的影响，也会产生一部分压降损失，导致实际的Vds会略微下降。同三极管类似，MOS管在饱和区内具有相似的放大特性，其公式为：Id=gfs*Vgs，gfs为MOS管的跨导，可从规格书中得到。</p>
+<p><strong>t2~t3</strong>  Id逐渐增大至最大值（由电路参数决定）时，MOS管开始进入米勒平台，**由于电流Id已经达到最大值保持不变，所以Vgs=Id/gfs亦保持不变，即从公式角度也可以解释米勒平台。**米勒平台电压大小可近似通过  Id=gfs(Vp-Vgs(th)) 估算，但要注意跨导gfs并不是一个常数，规格书中给出的数值都是基于一定的Vds和Id条件下得到的。另一种估算方法Id=K(Vp-Vgs(th))2，根据规格书中的参数计算出常数K，然后计算得到Vp。</p>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/c379f908-fd2d-4b4a-9552-d173fe4b1f98/Untitled.png" alt="Untitled"></p>
+<p><strong>同时</strong>，Vds开始以一定斜率下降。但是实际下降的斜率并非保持不变。因为Cgd电容在这个过程中是变化的，一开始Cgd较小，之后变大，所以实际的VDS曲线斜率会稍有变化，门级电流不变ig=C*dV/dt,即一开始Cgd电容小，电压下降较快，之后Cgd电容较大，电压下降较慢，Cgd电容值的变化曲线如图所示。（电容变大变小原因参考下节“结电容）</p>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/fd5e2872-f210-4ab2-94de-5719f6752559/Untitled.png" alt="Untitled"></p>
+<p>t0和t2的时间可以根据RC充放电原理进行近似计算，t0=Rg<em>Ciss</em>ln(Vgs/(Vgs-Vgs(th)))，t2= Rg<em>Ciss</em>ln(Vgs/(Vgs-Vp))。t2值近似于规格书中的参数延时导通时间td(on)。米勒平台的持续时间tp可以通过以下公式近似计算：由于该时间段内Vp保持不变，因此栅极驱动电流大小Ig=(Vgs - Vp)/Rg，tp=Qgd/Ig。tp=t3-t2，近似于规格书中的参数上升时间tr</p>
+
+
+
+
+<h1 id="结电容">结电容
+  <a href="#%e7%bb%93%e7%94%b5%e5%ae%b9"></a>
+</h1>
+
+
+
+
+<h3 id="基本特性">基本特性
+  <a href="#%e5%9f%ba%e6%9c%ac%e7%89%b9%e6%80%a7"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/3212dc10-f1db-4ff9-8167-8ad5bd9fd5ca/Untitled.png" alt="Untitled"></p>
+<p>Cgs基本不变</p>
+<p>Cgd和Cgs 非线性 承受反越高压 耗尽区展宽越宽  容值越小</p>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b00314fd-ab4f-4a5c-b0ff-ce8f563ef7de/Untitled.png" alt="                                    结电容随Vds变化规律"></p>
+<pre><code>                                结电容随Vds变化规律
+</code></pre>
+<p><strong>相同电流时</strong> 低压时 可承受dV/dt小  高压时dV/dt高</p>
+
+
+
+
+<h3 id="超结结电容变化对比">超结结电容变化对比
+  <a href="#%e8%b6%85%e7%bb%93%e7%bb%93%e7%94%b5%e5%ae%b9%e5%8f%98%e5%8c%96%e5%af%b9%e6%af%94"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d96bb3bc-5d81-41ce-9a24-54ea0dee2ee0/Untitled.png" alt="Untitled"></p>
+<p>超结芯片面积小 完全耗尽下 超结电容更小</p>
+<p>但低压下相对高 原因是没有横向耗尽完全时 pn结面积更大 结电容多了竖着的一部分面积</p>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/c2f3ac42-0413-4f0d-842f-10e35612eea4/Untitled.png" alt="Untitled"></p>
+
+
+
+
+<h2 id="ceq">Ceq
+  <a href="#ceq"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>栅源等效电容</p>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/1c894b42-722c-4ca0-8de0-41471df41554/Untitled.png" alt="Untitled"></p>
+<p>按时间等效电容 和 按能量等效电容</p>
+
+
+
+
+<h2 id="qg">Qg
+  <a href="#qg"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>实际的开关损耗电荷如图所示Qsw梯形区域</p>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/3db4d013-b6f7-4f3b-8289-e39465b2a884/Untitled.png" alt="Untitled"></p>
+<p>米勒平台又高又低 有长有短 主要由工况决定</p>
+
+
+
+
+<h1 id="安全工作区soa">安全工作区SOA
+  <a href="#%e5%ae%89%e5%85%a8%e5%b7%a5%e4%bd%9c%e5%8c%basoa"></a>
+</h1>
+<p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/5adb1332-1821-443b-a584-0e3bbaaf1446/Untitled.png" alt="Untitled"></p>
+<p>第一段 $Rds$决定</p>
+<p>第二段 脉冲电流决定</p>
+<p>第三段 耗散功率决定</p>
+<p>第四段 器件耐压决定</p>
 <!-- 
 原文例子学习
 *— [Chris House, A Complete Guide to CSS Grid Layout](http://chris.house/blog/a-complete-guide-css-grid-layout/)* [^1]           ##这个角标1
@@ -179,71 +623,20 @@ CSS Grid is a total game changer, IMHO. Compared to the bottomless pit uch. I me
 
 [^1]: The original article cited here is now updated and maintained by the staff over at CSS-Tricks. Bookmark their version if you want to dive in and learn about CSS Grid: [A Complete Guide to Grid](https://css-tricks.com/snippets/css/complete-guide-grid/) -->
 
-      </section>
-      <footer class="post-footer">
-        <div class="post-pagination dt w-100 mt4 mb2">
-  
-  
-  
-  
-</div>
-
-      </footer>
-    </article>
-    
-  </section>
-</main>
-<aside class="page-sidebar" role="complementary">
-                         
- 
-
-
-                       
- 
-
-
-
-
-
-
-
-
-
-
-
-  <img src="/project/sidebar-listing.jpg" class="db ma0">
-
-
-<div class="blog-info ph4 pt4 pb4 pb0-l">
-  
-
-  <h1 class="f3">项目经历</h1>
-  <p class="f6 lh-copy measure">Here are some projects I have done.</p>
-  <p class="f7 measure lh-copy i mh0-l">Written by Hustle</p>
-
-
-  <small class="db f7"><a href="/project/" class="dib fw7 ttu bt bw1 b--black-10 pt3">View all projects</a></small>
-</div>
-
-
-<div class="ad-unit pa4">
-  
-</div>
-
-  
-  <details open class="f6 fw7 input-reset">
+        
+        <details closed class="f6 fw7 input-reset">
   <dl class="f6 lh-copy">
     <dt class="fw7">Posted on:</dt>
     <dd class="fw5 ml0">November 24, 2022</dd>
   </dl>
   <dl class="f6 lh-copy">
     <dt class="fw7">Length:</dt>
-    <dd class="fw5 ml0">1 minute read, 5 words</dd>
+    <dd class="fw5 ml0">1 minute read, 190 words</dd>
   </dl>
   
   <dl class="f6 lh-copy">
     <dt class="fw7">Categories:</dt>
-    <dd class="fw5 ml0"> <a href="/categories/electronic">Electronic</a>  <a href="/categories/power-electronic">Power Electronic</a> </dd>
+    <dd class="fw5 ml0"> <a href="/categories/%E7%94%B5%E5%8A%9B%E7%94%B5%E5%AD%90">电力电子</a>  <a href="/categories/%E7%94%B5%E5%AD%90">电子</a>  <a href="/categories/wpt">WPT</a> </dd>
   </dl>
   
   
@@ -259,7 +652,20 @@ CSS Grid is a total game changer, IMHO. Compared to the bottomless pit uch. I me
   </dl>
 </details>
 
-</aside>
+      </section>
+      <footer class="post-footer">
+        <div class="post-pagination dt w-100 mt4 mb2">
+  
+  
+  
+  
+</div>
+
+      </footer>
+    </article>
+    
+  </section>
+</main>
 <footer class="site-footer pv4 bt b--transparent ph5" role="contentinfo">
   <nav class="db dt-l w-100">
     <p class="site-copyright f7 db dtc-l v-mid w-100 w-33-l tc tl-l pv2 pv0-l mv0 lh-copy">
