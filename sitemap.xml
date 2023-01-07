@@ -3,7 +3,12 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://jenhustle.cn/</loc>
-    <lastmod>2022-12-21T21:57:49+08:00</lastmod>
+    <lastmod>2023-01-07T23:21:48+08:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url><url>
+    <loc>https://jenhustle.cn/post/230107/</loc>
+    <lastmod>2023-01-07T23:21:48+08:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url><url>
