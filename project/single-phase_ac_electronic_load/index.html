@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="zh" dir="ltr"><head>
+  
+                           
+     
+
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.106.0">
+<title>单相交流电子负载 | Hustle</title>
+
+
+<meta property="twitter:site" content="@apreshill">
+<meta property="twitter:creator" content="@apreshill">
+
+
+
+
+
+
+
+  
+    
+  
+<meta name="description" content="single-phase AC electronic load">
+
+
+<meta property="og:site_name" content="Hustle">
+<meta property="og:title" content="单相交流电子负载 | Hustle">
+<meta property="og:description" content="single-phase AC electronic load" />
+<meta property="og:type" content="page" />
+<meta property="og:url" content="/project/single-phase_ac_electronic_load/" />
+<meta property="og:locale" content="zh">
+
+
+
+
+    
+        <meta property="og:image" content="/project/single-phase_ac_electronic_load/featured.jpg" >
+        <meta property="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="/project/single-phase_ac_electronic_load/featured.jpg" >
+    
+    
+  <meta itemprop="name" content="单相交流电子负载">
+<meta itemprop="description" content="问题分析、赛题以及设计报告
+DEBUG 概述：前级单电流环整流（负载特性模拟单元），后级逆变电压环稳直流母线电压（能量回馈单元）。使用锁相环以及电流环 PI 改变 SPWM 的占空比来稳定输入电流幅值和相位来实现功率因素调整，进而模拟不同的负载特性，后级通过 PI 稳定直流侧电压。
+为何选取此方案：整流侧可以少调一个电压环，但会造成母线电压不稳定。一开始先调整流，后面直接功率电阻（阻感性），此时还不知道通过后级逆变可以等效电阻。后经仿真验证，可以通过后级逆变来稳定直流电压，此时要注意误差应为母线电压实际值减去设定值。缺点：解耦程度较低，若逆变单元不工作，则直流母线电压不稳定。整流直接满足电流有效值和功率因素的要求，输入功率固定不变，用逆变单元来控制自身消耗功率维持平衡。
+其他方案：
+1.前级单环，后级双环也就是多了一个电流环来控制输出瞬时电流。 2.前级电压双环，后级根据输入交流电流的幅值与题目要求的误差对调制度进行调整，使实际输入电流幅值等于题目要求的幅值 3.无法使用前级双环整流，后级开环 因为输入功率为定值，输出电压为定值，则等效负载为定值才能满足功率守恒。当需要调节功率因素时，无法改变等效电阻导致输入电流无法稳定。
+流程：前级电流环调好后，加入调试好的后级逆变器，后面加的回馈电阻根据计算需要微调，最后进行效率测试和微调。为保险起见，未做大改动。
+回馈电阻的选择：后级逆变单元和回馈电阻可以等效一个电阻，详细推导在设计报告中。
+后级逆变调试问题：逆变单元单独调试，直流侧电压为非固定的电压，即需要稳住的电压，故直流侧不能直接施加稳压电源，需加入电流源和电阻。
+母线电压问题：期间母线电压无法达到期望值在50V-60V，发现是母线电容过小，导致电压无法升上去。母线电容一开始是集成在板桥模块上的，大约1mF不到，后增加2mF左右的电容问题解决。
+交流输入采样问题：由于rc时间常数过高造成采样值与实际值存在一定的相位差，后调节RC大小改善采样精确度进而提高电流环的精确度
+PI响应速度：电压前馈
+优化：
+方案优化 使用耦合度更高的方案 效率优化 只用一块DSP 跟换核心板 直流母线二倍公频纹波 可以改善（未改善），可通过调整逆变输出电压和整流输入电流相位的关系，可以在后级电压外环的PI前加入一个二倍公频陷波器，或者压低直流侧电压外环的带框，通过减慢PI的调节速度来实现，或利用逆变单元调制的额外相角来实现公频纹波的抑制
+PS：系统启动时，需先不控整流给直流母线充电
+赛题 设计报告 系统方案 方案选择 方案一
+采用单相全桥整流电路、单相全桥逆变电路级联。使用 MOS 管进行整流工作，进行可控整流，所以此方案可以显著提高系统效率，且系统功率容量大；但是要实现高效率、高功率因数等要求,对实时控制算法的要求较高。
+方案二
+采用 UCC28019 实现功率因素校正，拓扑采用不控整流与 BOOST-BUCK 级联方案。此方案电路拓扑简单，模拟 IC 控制实现功率因数校正容易；缺点是不可以改变输入电流与电压相位，难以实现负载特性的模拟。
+综上所述，因为本系统对控制的灵活性要求高，要实现稳定输入、系统整体高效率与交流输入功率因数精准可调，模拟控制较难实现。方案一使用锁相环能够跟踪锁定输入电压相位，对输入交流电流的瞬时值进行闭环控制，使输入电流与电压同相实现功率因数校正，并且能够改变电压电流的相角差来模拟感性容性负载，但算法难度较大。方案二采用不控整流无法实现功率因数调整。综合考虑题目要求与准备情况，选用方案一。
+系统框架 系统以单相 PWM 整流电路与单相逆变电路为主电路拓扑结构，以TMS320F28335 为主控。系统框架如图 1所示。交流输入电压为 30V，输入电流为 2A, PWM 整流器为负载特性模拟单元，逆变器为能量反馈单元。本设计的算法核心在于利用锁相环跟踪锁定输入电压相位，并且通过移相以及 PI 控制算法调节电流环，使输入侧的电流与电压的相位角差值精准可控，能够得到需要的任意角度进而实现对不同特性负载的模拟。
+理论分析与计算 能量流动分析 逆变单元功率分析 给定功率因数时，整流单元供给直流侧的功率 P1必然恒定，同时逆变单元采用 SPWM 调制，忽略死区效应以及滤波器压降，则负载上的输出电压可近似为
+其中 m 为 SPWM 的调制度，则负载 R 上消耗的功率为"><meta itemprop="datePublished" content="2022-08-25T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2022-08-25T00:00:00+00:00" />
+<meta itemprop="wordCount" content="157"><meta itemprop="image" content="/project/single-phase_ac_electronic_load/featured.jpg">
+<meta itemprop="keywords" content="hustle-site," />
+  
+  
+  <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+  
+  
+  <link rel="stylesheet" href="/style.main.min.36233a39979933db8877785b1879dd1ee29d2f4bf092a7566e716b04552caf2c.css" integrity="sha256-NiM6OZeZM9uId3hbGHndHuKdL0vwkqdWbnFrBFUsryw=" media="screen">
+  
+  
+  <script src="/panelset.min.ed1ac24b6e16f4e2481e3d1d098ae66f5bc77438aef619e6e266d8ac5b00dc72.js" type="text/javascript"></script>
+  
+  
+  <script src="/main.min.62a7f7a2d29d031897400ce35bc7c72bc953d24fa1193bee8f97864113de8c74.js" type="text/javascript"></script>
+</head>
+<body>
+      <div class="grid-container single">
+<header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
+  <nav class="site-nav db dt-l w-100" role="navigation">
+    <a class="site-brand db dtc-l v-mid link no-underline w-100 w-33-l tc tl-l" href="/" title="Home">
+      <img src="/img/blogophonic-mark-dark.png" class="dib db-l h2 w-auto" alt="Hustle">
+    </a>
+    <div class="site-links db dtc-l v-mid w-100 w-47-l tc tr-l mt3 mt0-l ttu tracked">
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/about/" title="About Hustle">关于</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/blog/" title="Blog">博客</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 active" href="/project/" title="Project">项目</a>
+      
+      
+    </div>
+  </nav>
+</header>
+
+<main class="page-main pa4" role="main">
+  <section class="page-content mw7 center">
+    <article class="post-content pa0 ph4-l">
+      <header class="post-header">
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">单相交流电子负载</h1>
+        <h4 class="f4 mt0 mb4 lh-title measure">single-phase AC electronic load</h4>
+        <p class="f6 measure lh-copy mv1">By Hustle in <a href="/categories/%E7%94%B5%E5%8A%9B%E7%94%B5%E5%AD%90">电力电子</a>  <a href="/categories/%E7%94%B5%E5%AD%90">电子</a>  <a href="/categories/%E6%95%B4%E6%B5%81%E5%99%A8">整流器</a>  <a href="/categories/%E9%80%86%E5%8F%98%E5%99%A8">逆变器</a>  <a href="/categories/%E5%8A%9F%E7%8E%87%E5%9B%A0%E7%B4%A0">功率因素</a> </p>
+        <p class="f7 db mv0 ttu">August 25, 2022</p>
+
+      
+      <div class="ph0 pt5">
+        
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+      
+  <a class="btn-links mr2 ba dib" href="https://scholar.google.com.hk/scholar?hl=zh-CN&amp;as_sdt=0%2C5&amp;as_vis=1&amp;q=%E5%8D%95%E7%9B%B8%E4%BA%A4%E6%B5%81%E7%94%B5%E5%AD%90%E8%B4%9F%E8%BD%BD&amp;btnG=" target="_blank" rel="noopener"><i class="fab fa-google fa-lg fa-fw mr2"></i>谷歌学术</a>
+
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+      
+  <a class="btn-links mr2 ba dib" href="https://www.bilibili.com/video/BV18G4y1p7t2/?spm_id_from=333.999.0.0" target="_blank" rel="noopener"><i class="fas fa-tv fa-lg fa-fw mr2"></i>b站视频</a>
+
+
+      </div>
+      
+
+      </header>
+      <section class="post-body pt5 pb4">
+        <p><strong>问题分析、赛题以及设计报告</strong></p>
+
+
+
+
+<h1 id="debug">DEBUG
+  <a href="#debug"></a>
+</h1>
+<p><strong>概述</strong>：前级单电流环整流（负载特性模拟单元），后级逆变电压环稳直流母线电压（能量回馈单元）。使用锁相环以及电流环 PI 改变 SPWM 的占空比来稳定输入电流幅值和相位来实现功率因素调整，进而模拟不同的负载特性，后级通过 PI 稳定直流侧电压。</p>
+<p><strong>为何选取此方案</strong>：整流侧可以少调一个电压环，但会造成母线电压不稳定。一开始先调整流，后面直接功率电阻（阻感性），此时还不知道通过后级逆变可以等效电阻。后经仿真验证，可以通过后级逆变来稳定直流电压，此时要注意误差应为母线电压实际值减去设定值。<strong>缺点</strong>：解耦程度较低，若逆变单元不工作，则直流母线电压不稳定。整流直接满足电流有效值和功率因素的要求，输入功率固定不变，用逆变单元来控制自身消耗功率维持平衡。</p>
+<p><strong>其他方案：</strong></p>
+<p>1.前级单环，后级双环也就是多了一个电流环来控制输出瞬时电流。
+2.前级电压双环，后级根据输入交流电流的幅值与题目要求的误差对调制度进行调整，使实际输入电流幅值等于题目要求的幅值
+3.无法使用前级双环整流，后级开环 因为输入功率为定值，输出电压为定值，则等效负载为定值才能满足功率守恒。当需要调节功率因素时，无法改变等效电阻导致输入电流无法稳定。</p>
+<p><strong>流程</strong>：前级电流环调好后，加入调试好的后级逆变器，后面加的回馈电阻根据计算需要微调，最后进行效率测试和微调。为保险起见，未做大改动。</p>
+<p><strong>回馈电阻的选择</strong>：后级逆变单元和回馈电阻可以等效一个电阻，详细推导在设计报告中。</p>
+<p><strong>后级逆变调试问题</strong>：逆变单元单独调试，直流侧电压为非固定的电压，即需要稳住的电压，故直流侧不能直接施加稳压电源，需加入电流源和电阻。</p>
+<p><strong>母线电压问题</strong>：期间母线电压无法达到期望值在50V-60V，发现是母线电容过小，导致电压无法升上去。母线电容一开始是集成在板桥模块上的，大约1mF不到，后增加2mF左右的电容问题解决。</p>
+<p><strong>交流输入采样问题</strong>：由于rc时间常数过高造成采样值与实际值存在一定的相位差，后调节RC大小改善采样精确度进而提高电流环的精确度</p>
+<p><strong>PI响应速度</strong>：电压前馈</p>
+<p><strong>优化：</strong></p>
+<p>方案优化 使用耦合度更高的方案
+效率优化  只用一块DSP 跟换核心板
+直流母线二倍公频纹波 可以改善（未改善），可通过调整逆变输出电压和整流输入电流相位的关系，可以在后级电压外环的PI前加入一个二倍公频陷波器，或者压低直流侧电压外环的带框，通过减慢PI的调节速度来实现，或利用逆变单元调制的额外相角来实现公频纹波的抑制</p>
+<p>PS：系统启动时，需先不控整流给直流母线充电</p>
+
+
+
+
+<h1 id="赛题">赛题
+  <a href="#%e8%b5%9b%e9%a2%98"></a>
+</h1>
+<p><img src="topic_1.png" alt="Untitled"></p>
+<p><img src="topic_2.png" alt="Untitled"></p>
+
+
+
+
+<h1 id="设计报告">设计报告
+  <a href="#%e8%ae%be%e8%ae%a1%e6%8a%a5%e5%91%8a"></a>
+</h1>
+
+
+
+
+<h2 id="系统方案">系统方案
+  <a href="#%e7%b3%bb%e7%bb%9f%e6%96%b9%e6%a1%88"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+
+
+
+
+<h3 id="方案选择">方案选择
+  <a href="#%e6%96%b9%e6%a1%88%e9%80%89%e6%8b%a9"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p><strong>方案一</strong></p>
+<p>采用单相全桥整流电路、单相全桥逆变电路级联。使用 MOS 管进行整流工作，进行可控整流，所以此方案可以显著提高系统效率，且系统功率容量大；但是要实现高效率、高功率因数等要求,对实时控制算法的要求较高。</p>
+<p><strong>方案二</strong></p>
+<p>采用 UCC28019 实现功率因素校正，拓扑采用不控整流与 BOOST-BUCK 级联方案。此方案电路拓扑简单，模拟 IC 控制实现功率因数校正容易；缺点是不可以改变输入电流与电压相位，难以实现负载特性的模拟。</p>
+<p><strong>综上所述</strong>，因为本系统对控制的灵活性要求高，要实现稳定输入、系统整体高效率与交流输入功率因数精准可调，模拟控制较难实现。方案一使用锁相环能够跟踪锁定输入电压相位，对输入交流电流的瞬时值进行闭环控制，使输入电流与电压同相实现功率因数校正，并且能够改变电压电流的相角差来模拟感性容性负载，但算法难度较大。方案二采用不控整流无法实现功率因数调整。综合考虑题目要求与准备情况，选用方案一。</p>
+
+
+
+
+<h3 id="系统框架">系统框架
+  <a href="#%e7%b3%bb%e7%bb%9f%e6%a1%86%e6%9e%b6"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>系统以单相 PWM 整流电路与单相逆变电路为主电路拓扑结构，以TMS320F28335 为主控。系统框架如图 1所示。交流输入电压为 30V，输入电流为 2A, PWM 整流器为负载特性模拟单元，逆变器为能量反馈单元。本设计的算法核心在于利用锁相环跟踪锁定输入电压相位，并且通过移相以及 PI 控制算法调节电流环，使输入侧的电流与电压的相位角差值精准可控，能够得到需要的任意角度进而实现对不同特性负载的模拟。</p>
+<p><img src="plan.png" alt="Untitled"></p>
+
+
+
+
+<h2 id="理论分析与计算">理论分析与计算
+  <a href="#%e7%90%86%e8%ae%ba%e5%88%86%e6%9e%90%e4%b8%8e%e8%ae%a1%e7%ae%97"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+
+
+
+
+<h3 id="能量流动分析">能量流动分析
+  <a href="#%e8%83%bd%e9%87%8f%e6%b5%81%e5%8a%a8%e5%88%86%e6%9e%90"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p><img src="energy_analyze.png" alt="Untitled"></p>
+
+
+
+
+<h3 id="逆变单元功率分析">逆变单元功率分析
+  <a href="#%e9%80%86%e5%8f%98%e5%8d%95%e5%85%83%e5%8a%9f%e7%8e%87%e5%88%86%e6%9e%90"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>给定功率因数时，整流单元供给直流侧的功率 P1必然恒定，同时逆变单元采用 SPWM 调制，忽略死区效应以及滤波器压降，则负载上的输出电压可近似为</p>
+<p><img src="1.png" alt="Untitled"></p>
+<p>其中 m 为 SPWM 的调制度，则负载 R 上消耗的功率为</p>
+<p><img src="2.png" alt="Untitled"></p>
+<p>忽略逆变单元的能量损耗，则可将逆变单元交流侧的负载等效折算至直流侧为</p>
+<p><img src="3.png" alt="Untitled"></p>
+<p>则整个逆变单元及其负载，可近似等效为连接至直流侧的一个可调电阻。</p>
+
+
+
+
+<h3 id="直流侧电压及逆变侧负载选择">直流侧电压及逆变侧负载选择
+  <a href="#%e7%9b%b4%e6%b5%81%e4%be%a7%e7%94%b5%e5%8e%8b%e5%8f%8a%e9%80%86%e5%8f%98%e4%be%a7%e8%b4%9f%e8%bd%bd%e9%80%89%e6%8b%a9"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>逆变单元调制度 m 越高（最高为 1），等效直流电阻 Req 越小；</p>
+<p>逆变单元调制度 m 越低（最低为 0），等效直流电阻 Req 越大；</p>
+<p>等效直流电阻 R 的调节范围为[2 , R +∞) 。</p>
+<p>输入电压交流有效值 30V，则峰值为 42.4V，直流侧电压设定值可取 50V，更保险一些可以取 60V.当直流侧电压取 50V 时，逆变单元最大可消耗的功率应不低于 60W，则</p>
+<p><img src="4.png" alt="Untitled"></p>
+<p>当直流侧电压取 60V 时，逆变单元最大可消耗的功率应不低于 60W，则 电路与程序设计</p>
+<p><img src="5.png" alt="Untitled"></p>
+<p>本设计直流侧电压取 50V。</p>
+
+
+
+
+<h2 id="电路与程序设计">电路与程序设计
+  <a href="#%e7%94%b5%e8%b7%af%e4%b8%8e%e7%a8%8b%e5%ba%8f%e8%ae%be%e8%ae%a1"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+
+
+
+
+<h3 id="器件选型">器件选型
+  <a href="#%e5%99%a8%e4%bb%b6%e9%80%89%e5%9e%8b"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>本系统中的被测交流电源为 30V，硬件实验平台按照 60W 设计，前级负载模拟侧电流可根据实际需求调节，后级能量回馈侧输出峰值电流经计算为2.83A。根据主电路的实际情况，本文选取的 MOSFET 功率开关管的型号为 SUP85N10，其最大耐压为 100V，最大允许的电流值为 85A。由前面所得的电路参数可知，该 MOSFET 的允许电压、电流值远大于电路的实际电压电流值，能够满足主电路的设计需求。</p>
+
+
+
+
+<h3 id="采样电路">采样电路
+  <a href="#%e9%87%87%e6%a0%b7%e7%94%b5%e8%b7%af"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>交流电流采样设计： 霍尔电流传感器 CSM050LA
+交流电压采样设计： 霍尔电压传感器 TBV5/25A
+直流电压采样设计： 霍尔电压传感器 TBV5/25A</p>
+
+
+
+
+<h3 id="软件程序">软件程序
+  <a href="#%e8%bd%af%e4%bb%b6%e7%a8%8b%e5%ba%8f"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>软件程序采用 PWM 触发采样交流输入电压瞬时值以及电流瞬时值，单相交流电压通过软件锁相环采取相位，进而通过移相以及电流环 PI 改变 SPWM 的占空比来稳定输入电流幅值以及相位来实现功率因素调整，进而模拟不同的负载特性。后级通过 PI 稳定直流侧电压。</p>
+<p><img src="6.png" alt="负载模拟单元"></p>
+<p>负载模拟单元</p>
+<p><img src="7.png" alt="能量反馈单元"></p>
+<p>能量反馈单元</p>
+<p><img src="8.png" alt="控制流程图"></p>
+<p>控制流程图</p>
+
+
+
+
+<h2 id="测试结果">测试结果
+  <a href="#%e6%b5%8b%e8%af%95%e7%bb%93%e6%9e%9c"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>实现模拟容性、感性和阻性负载，功率因素在 0.5‑0.998 之间自由调节，输入电流波动率 0.12%，效率 88%，达到赛题要求。
+<img src="9.jpg" alt=""></p>
+
+
+
+
+<h2 id="结果分析">结果分析
+  <a href="#%e7%bb%93%e6%9e%9c%e5%88%86%e6%9e%90"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>由于系统架构设计较为合理，功能电路实现较好，系统较好地实现了题目的要求。由测试结果可知:实时控制算法起到了很好负载特性模拟效果，电流跟随电压特性良好；输入电流稳定可靠，谐波较少，达到题目的要求;系统的整体效率为 83.0%,有待改善；系统具有实时 PF 调节功能，精度达到0.01。</p>
+<!-- 
+原文例子学习
+*— [Chris House, A Complete Guide to CSS Grid Layout](http://chris.house/blog/a-complete-guide-css-grid-layout/)* [^1]           ##这个角标1
+
+---
+##标题  title后面意义未知不显示
+### <dfn title="Ermahgerd is a humorous version of the phrase oh my god, written as though pronounced with a heavy influence of extra Rs. It's meant to imitate the sound of someone speaking through a retainer">ERMAHGERD</dfn>
+
+
+
+> ##### CSS Grid Layout Module
+>
+> This CSS module definesen of a grid container can be positioned into arbitrary slots in a predefined flexible or fixed-size layout grid.
+>
+> — _W3C_
+
+CSS Grid is a total game changer, IMHO. Compared to the bottomless pit uch. I mean this is really the meat of the deal:
+
+```css
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(3, auto);
+}
+```
+
+
+
+[^1]: The original article cited here is now updated and maintained by the staff over at CSS-Tricks. Bookmark their version if you want to dive in and learn about CSS Grid: [A Complete Guide to Grid](https://css-tricks.com/snippets/css/complete-guide-grid/) -->
+
+        
+        <details closed class="f6 fw7 input-reset">
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Posted on:</dt>
+    <dd class="fw5 ml0">August 25, 2022</dd>
+  </dl>
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Length:</dt>
+    <dd class="fw5 ml0">1 minute read, 157 words</dd>
+  </dl>
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Categories:</dt>
+    <dd class="fw5 ml0"> <a href="/categories/%E7%94%B5%E5%8A%9B%E7%94%B5%E5%AD%90">电力电子</a>  <a href="/categories/%E7%94%B5%E5%AD%90">电子</a>  <a href="/categories/%E6%95%B4%E6%B5%81%E5%99%A8">整流器</a>  <a href="/categories/%E9%80%86%E5%8F%98%E5%99%A8">逆变器</a>  <a href="/categories/%E5%8A%9F%E7%8E%87%E5%9B%A0%E7%B4%A0">功率因素</a> </dd>
+  </dl>
+  
+  
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Tags:</dt>
+    <dd class="fw5 ml0"> <a href="/tags/hustle-site">hustle-site</a> </dd>
+  </dl>
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">See Also:</dt>
+    
+    <dd class="fw5 ml0"><a href="/project/pfc_ucc28019&#43;lt4320/">基于UCC28019的高功率因素电源</a></dd>
+    
+    <dd class="fw5 ml0"><a href="/project/wpt/">磁耦合谐振式无线电能传输</a></dd>
+    
+  </dl>
+</details>
+
+      </section>
+      <footer class="post-footer">
+        <div class="post-pagination dt w-100 mt4 mb2">
+  
+  
+  
+  
+    <a class="next dtc pl2 tr v-top fw6"
+    href="/project/pfc_ucc28019&#43;lt4320/">基于UCC28019的高功率因素电源 &rarr;</a>
+  
+</div>
+
+      </footer>
+    </article>
+    
+  </section>
+</main>
+<footer class="site-footer pv4 bt b--transparent ph5" role="contentinfo">
+  <nav class="db dt-l w-100">
+    <p class="site-copyright f7 db dtc-l v-mid w-100 w-33-l tc tl-l pv2 pv0-l mv0 lh-copy">
+      苏ICP备2022047054号-1
+      <span class="middot-divider"></span>
+      Made with <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/hugo-apero/" rel="dct:source">Hugo Apéro</a></span>.
+      <br />
+      
+Based on <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/formspree/blogophonic-hugo" rel="dct:source">Blogophonic</a></span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://formspree.io" property="cc:attributionName" rel="cc:attributionURL">Formspree</a>.
+    </p>
+    
+    <div class="site-social-links db dtc-l v-mid w-100 w-33-l tc pv2 pv0-l mv0">
+      <div class="social-icon-links" aria-hidden="true">
+  
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="http://wpa.qq.com/msgrd?v=3&amp;uin=1163245390&amp;site=qq&amp;menu=yes" title="qq" target="_blank" rel="me noopener">
+      <i class="fab fa-qq fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://space.bilibili.com/49891326?" title="tv" target="_blank" rel="me noopener">
+      <i class="fas fa-tv fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://www.douyin.com/user/MS4wLjABAAAATL8RrgaFMVASPls1vY1erRumqArbTg1t4IOaNbNdUpbRJ8o8KVMAdzIiEl5uKWYk" title="tiktok" target="_blank" rel="me noopener">
+      <i class="fab fa-tiktok fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://github.com/eeeHustle" title="github" target="_blank" rel="me noopener">
+      <i class="fab fa-github fa-lg fa-fw"></i>
+    </a>
+  
+</div>
+
+    </div>
+    
+    <div class="site-links f6 db dtc-l v-mid w-100 w-67-l tc tr-l pv2 pv0-l mv0">
+      
+    </div>
+  </nav>
+  
+    <script>
+
+    var i, text, code, codes = document.getElementsByTagName('code');
+    for (let i = 0; i < codes.length;) {
+      code = codes[i];
+      if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+        text = code.textContent;
+        if (/^\$[^$]/.test(text) && /[^$]\$$/.test(text)) {
+          text = text.replace(/^\$/, '\\(').replace(/\$$/, '\\)');
+          code.textContent = text;
+        }
+        if (/^\\\((.|\s)+\\\)$/.test(text) ||
+            /^\\\[(.|\s)+\\\]$/.test(text) ||
+            /^\$(.|\s)+\$$/.test(text) ||
+            /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+          code.outerHTML = code.innerHTML;  
+          continue;
+        }
+      }
+      i++;
+    }
+</script>
+
+  
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+
+
+    
+  
+  
+</footer>
+
+      </div>
+    </body>
+</html>

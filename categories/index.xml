@@ -6,7 +6,7 @@
     <description>Recent content in Categories on Hustle</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <copyright>备案信息</copyright>
+    <copyright>苏ICP备2022047054号-1</copyright>
     <lastBuildDate>Fri, 25 Nov 2022 00:00:00 +0000</lastBuildDate><atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>专利</title>
@@ -18,18 +18,36 @@
     </item>
     
     <item>
-      <title>WPT</title>
-      <link>/categories/wpt/</link>
-      <pubDate>Thu, 24 Nov 2022 00:00:00 +0000</pubDate>
+      <title>Start blog</title>
+      <link>/categories/start-blog/</link>
+      <pubDate>Wed, 23 Nov 2022 00:00:00 +0000</pubDate>
       
-      <guid>/categories/wpt/</guid>
+      <guid>/categories/start-blog/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>功率因素</title>
+      <link>/categories/%E5%8A%9F%E7%8E%87%E5%9B%A0%E7%B4%A0/</link>
+      <pubDate>Thu, 25 Aug 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/%E5%8A%9F%E7%8E%87%E5%9B%A0%E7%B4%A0/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>整流器</title>
+      <link>/categories/%E6%95%B4%E6%B5%81%E5%99%A8/</link>
+      <pubDate>Thu, 25 Aug 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/%E6%95%B4%E6%B5%81%E5%99%A8/</guid>
       <description></description>
     </item>
     
     <item>
       <title>电力电子</title>
       <link>/categories/%E7%94%B5%E5%8A%9B%E7%94%B5%E5%AD%90/</link>
-      <pubDate>Thu, 24 Nov 2022 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 25 Aug 2022 00:00:00 +0000</pubDate>
       
       <guid>/categories/%E7%94%B5%E5%8A%9B%E7%94%B5%E5%AD%90/</guid>
       <description></description>
@@ -38,18 +56,27 @@
     <item>
       <title>电子</title>
       <link>/categories/%E7%94%B5%E5%AD%90/</link>
-      <pubDate>Thu, 24 Nov 2022 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 25 Aug 2022 00:00:00 +0000</pubDate>
       
       <guid>/categories/%E7%94%B5%E5%AD%90/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Start blog</title>
-      <link>/categories/start-blog/</link>
-      <pubDate>Wed, 23 Nov 2022 00:00:00 +0000</pubDate>
+      <title>逆变器</title>
+      <link>/categories/%E9%80%86%E5%8F%98%E5%99%A8/</link>
+      <pubDate>Thu, 25 Aug 2022 00:00:00 +0000</pubDate>
       
-      <guid>/categories/start-blog/</guid>
+      <guid>/categories/%E9%80%86%E5%8F%98%E5%99%A8/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>WPT</title>
+      <link>/categories/wpt/</link>
+      <pubDate>Sun, 24 Jul 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/wpt/</guid>
       <description></description>
     </item>
     

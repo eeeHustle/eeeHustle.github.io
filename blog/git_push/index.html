@@ -47,11 +47,11 @@
 <meta itemprop="description" content="使用hugo命令 网站建设完成后 使用命令
 hugo 会在public文件下生成html文件
 使用git工具 在public文件夹下 使用命令
-git init git add . #将当前目录下修改的所有代码从工作区添加到暂存区 git commit -m &#34;注释&#34; #将缓存区内容添加到本地仓库 git push -u origin master #“-u”参数时，表示下次继续push的这个远端分支的时候 #推送命令就可以简写成“git push” 报错解决 1. &ldquo;! [rejected] master -&gt; master (fetch first)&rdquo; 原因： github上的远程库与本地库版本不一致
+git init git remote add origin https://github.com/eeeHustle/eeeHustle.github.io.git 连接到远端仓库 git check main #切换到main分支 git add . #将当前目录下修改的所有代码从工作区添加到暂存区 git commit -m &#34;注释&#34; #将缓存区内容添加到本地仓库 git push -u origin master #“-u”参数时，表示下次继续push的这个远端分支的时候 #推送命令就可以简写成“git push” 报错解决 1. &ldquo;! [rejected] master -&gt; master (fetch first)&rdquo; 原因： github上的远程库与本地库版本不一致
 解决方法：
-将本地库强行覆盖远程库 git push -f 将远程库更新到本地库 git pull origin master 2. &ldquo;Failed to connect to github.com port 443 after 21085 ms: Timed out&rdquo; git config --global --unset http.proxy git config --global --unset https."><meta itemprop="datePublished" content="2022-11-23T00:00:00+00:00" />
+将本地库强行覆盖远程库 git push -f 将远程库更新到本地库 git pull origin master 2. &ldquo;Failed to connect to github.com port 443 after 21085 ms: Timed out&rdquo; git config --global --unset http."><meta itemprop="datePublished" content="2022-11-23T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2022-11-23T00:00:00+00:00" />
-<meta itemprop="wordCount" content="236"><meta itemprop="image" content="/blog/git_push/featured.png">
+<meta itemprop="wordCount" content="246"><meta itemprop="image" content="/blog/git_push/featured.png">
 <meta itemprop="keywords" content="" />
   
   
@@ -133,6 +133,8 @@ git init git add . #将当前目录下修改的所有代码从工作区添加到
 </h2>
 <p>在public文件夹下  使用命令</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-toml" data-lang="toml"><span style="display:flex;"><span>git init
+</span></span><span style="display:flex;"><span>git remote add origin https<span style="color:#a61717;background-color:#e3d2d2">://</span>github.com<span style="color:#a61717;background-color:#e3d2d2">/</span>eeeHustle<span style="color:#a61717;background-color:#e3d2d2">/</span>eeeHustle.github.io.git <span style="color:#a61717;background-color:#e3d2d2">连接到远端仓库</span>
+</span></span><span style="display:flex;"><span>git check main              <span style="color:#998;font-style:italic">#切换到main分支</span>
 </span></span><span style="display:flex;"><span>git add .                   <span style="color:#998;font-style:italic">#将当前目录下修改的所有代码从工作区添加到暂存区</span>
 </span></span><span style="display:flex;"><span>git commit -m <span style="color:#d14">&#34;注释&#34;</span>        <span style="color:#998;font-style:italic">#将缓存区内容添加到本地仓库</span>
 </span></span><span style="display:flex;"><span>git push -u origin master   <span style="color:#998;font-style:italic">#“-u”参数时，表示下次继续push的这个远端分支的时候</span>
@@ -355,7 +357,7 @@ and look into the future&rdquo;</p>
   </dl>
   <dl class="f6 lh-copy">
     <dt class="fw7">Length:</dt>
-    <dd class="fw5 ml0">2 minute read, 236 words</dd>
+    <dd class="fw5 ml0">2 minute read, 246 words</dd>
   </dl>
   
   <dl class="f6 lh-copy">
@@ -375,7 +377,7 @@ and look into the future&rdquo;</p>
 <footer class="site-footer pv4 bt b--transparent ph5" role="contentinfo">
   <nav class="db dt-l w-100">
     <p class="site-copyright f7 db dtc-l v-mid w-100 w-33-l tc tl-l pv2 pv0-l mv0 lh-copy">
-      备案信息
+      苏ICP备2022047054号-1
       <span class="middot-divider"></span>
       Made with <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/hugo-apero/" rel="dct:source">Hugo Apéro</a></span>.
       <br />

@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="zh" dir="ltr"><head>
+  
+                           
+     
+
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="generator" content="Hugo 0.106.0">
+<title>基于UCC28019的高功率因素电源 | Hustle</title>
+
+
+<meta property="twitter:site" content="@apreshill">
+<meta property="twitter:creator" content="@apreshill">
+
+
+
+
+
+
+
+  
+    
+  
+<meta name="description" content="High power factor voltage based on UCC28019">
+
+
+<meta property="og:site_name" content="Hustle">
+<meta property="og:title" content="基于UCC28019的高功率因素电源 | Hustle">
+<meta property="og:description" content="High power factor voltage based on UCC28019" />
+<meta property="og:type" content="page" />
+<meta property="og:url" content="/project/pfc_ucc28019&#43;lt4320/" />
+<meta property="og:locale" content="zh">
+
+
+
+
+    
+        <meta property="og:image" content="/project/pfc_ucc28019&#43;lt4320/featured.png" >
+        <meta property="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="/project/pfc_ucc28019&#43;lt4320/featured.png" >
+    
+    
+  <meta itemprop="name" content="基于UCC28019的高功率因素电源">
+<meta itemprop="description" content="设计要求 根据2013年电赛赛题 ：
+系统方案 方案概述 采用单相全桥同步整流、boost PFC功率因素矫正电路级联。使用TL431同步整流芯片构成的全桥电路代替整流桥，降低输入电压电流波形畸变程度并提高效率；后级使用UCC28019芯片构成的boost PFC芯片。此方案电路拓扑简单，模拟 IC 控制实现高功率因数校正，但难以实现功率因素的调整。本设计还采用兼容设计，可以整流桥和TL431同步整流电路兼容。
+系统框架 该系统采用 TI 公司专用 APFC 整流控制芯片 UCC28019 作为控制核心，构成电压外环和电流内环的双环控制，构建了有源功率因数校正（APFC）的高功率因数整流电源。其中，电流内环作用是使网侧交流输入电流跟踪电网电压的波形与相位；电压外环为输出直流电压控制环，外环电压调节器的输出控制内环电流调节器的增益，使输出直流电压稳定。实际测试表明，采用UCC28019 作为本系统的 APFC 芯片完全达到或超过题目要求的所有指标。
+电路设计 主电路设计 Boost 升压电路中的储能电感 、功率开关管 、续流二极管 、输出滤波电容 是此电路的主要元器件。当功UCC28019 芯片的 8 号脚有PWM 波形输出时，功率开关管导通，整流电路输出的电压几乎全部加在储能电感 L 两端，此时电感极性为左端正右端负，续流二极管反偏处于截止状态，电流从电源正端经储能电感和功率开关管流回电源负端，储能电感电流按线性规律上升，电感将电能转化为磁能储存起来。经过一段时间后，控制电路无PWM 波形输出，开关管截止，两端自感电势的极性变为右端正左端负，使 二极管导通，电感释放储能，储能电感电流按线性规律下降；这时 Boost 电 路的输入电压和电感上的电压 UL 叠加起来，经续流二极管向负载供电和滤波电容充电。重复上述两种过程。
+可参考boost电路CCM模式下工作特点。 该电路的优点：
+（1）输出电压总是高于输入电压，当功率开关管被击穿短路时，不会出现输出电压过高而损坏负载的情况。
+（2）升压变换器的输入电流（即 L 中的电流iL）是连续的，不是脉冲电流，因此对电源只有较小的干扰，缓解输入滤波的任务。
+该电路的缺点：
+输出侧的电流（流经 D2 的电流）是不连续的，即脉冲电流，加重了输出滤波的任务。
+详细计算公式请参考芯片手册。
+开关管的选择 电感电流最大值为7.2A，电压最大值为35V，选取开关管为SUP85N10,Vds=100V,Rds(on)=0.01,Id=85A，
+续流二极管的选择 电感电流最大平均值为4.6A，选取MBR30100，Id=2*15A,V=100V,Vf=0.68V,Ifsm=350A,TJmax=150℃
+整流桥选择 兼容设计 GBJ3510，1000V,Iavg=4.2A
+电感 铁硅铝功率电感4mH，最小电感0.1mH
+取样电阻 0.07Ω 2W 限流点16.429A
+输出电容 输出保持时间20ms（30V）最低7700uf 选择9400uf，输出电压纹波0.72V"><meta itemprop="datePublished" content="2022-07-25T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2022-07-25T00:00:00+00:00" />
+<meta itemprop="wordCount" content="196"><meta itemprop="image" content="/project/pfc_ucc28019&#43;lt4320/featured.png">
+<meta itemprop="keywords" content="hustle-site," />
+  
+  
+  <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+  
+  
+  <link rel="stylesheet" href="/style.main.min.36233a39979933db8877785b1879dd1ee29d2f4bf092a7566e716b04552caf2c.css" integrity="sha256-NiM6OZeZM9uId3hbGHndHuKdL0vwkqdWbnFrBFUsryw=" media="screen">
+  
+  
+  <script src="/panelset.min.ed1ac24b6e16f4e2481e3d1d098ae66f5bc77438aef619e6e266d8ac5b00dc72.js" type="text/javascript"></script>
+  
+  
+  <script src="/main.min.62a7f7a2d29d031897400ce35bc7c72bc953d24fa1193bee8f97864113de8c74.js" type="text/javascript"></script>
+</head>
+<body>
+      <div class="grid-container single">
+<header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
+  <nav class="site-nav db dt-l w-100" role="navigation">
+    <a class="site-brand db dtc-l v-mid link no-underline w-100 w-33-l tc tl-l" href="/" title="Home">
+      <img src="/img/blogophonic-mark-dark.png" class="dib db-l h2 w-auto" alt="Hustle">
+    </a>
+    <div class="site-links db dtc-l v-mid w-100 w-47-l tc tr-l mt3 mt0-l ttu tracked">
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/about/" title="About Hustle">关于</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 " href="/blog/" title="Blog">博客</a>
+      
+        
+        
+        
+      <a class="link f6 f5-l dib pv1 ph2 active" href="/project/" title="Project">项目</a>
+      
+      
+    </div>
+  </nav>
+</header>
+
+<main class="page-main pa4" role="main">
+  <section class="page-content mw7 center">
+    <article class="post-content pa0 ph4-l">
+      <header class="post-header">
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">基于UCC28019的高功率因素电源</h1>
+        <h4 class="f4 mt0 mb4 lh-title measure">High power factor voltage based on UCC28019</h4>
+        <p class="f6 measure lh-copy mv1">By Hustle in <a href="/categories/%E7%94%B5%E5%8A%9B%E7%94%B5%E5%AD%90">电力电子</a>  <a href="/categories/%E7%94%B5%E5%AD%90">电子</a>  <a href="/categories/%E6%95%B4%E6%B5%81%E5%99%A8">整流器</a>  <a href="/categories/%E5%8A%9F%E7%8E%87%E5%9B%A0%E7%B4%A0">功率因素</a> </p>
+        <p class="f7 db mv0 ttu">July 25, 2022</p>
+
+      
+      <div class="ph0 pt5">
+        
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+      
+  <a class="btn-links mr2 ba dib" href="https://scholar.google.com.hk/scholar?hl=zh-CN&amp;as_sdt=0%2C5&amp;as_vis=1&amp;q=%E5%9F%BA%E4%BA%8EUCC28019%E7%9A%84%E9%AB%98%E5%8A%9F%E7%8E%87%E5%9B%A0%E7%B4%A0%E7%94%B5%E6%BA%90&amp;btnG=" target="_blank" rel="noopener"><i class="fab fa-google fa-lg fa-fw mr2"></i>谷歌学术</a>
+
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+      
+  <a class="btn-links mr2 ba dib" href="https://www.bilibili.com/video/BV1Pr4y1j74z/?spm_id_from=333.999.0.0" target="_blank" rel="noopener"><i class="fas fa-tv fa-lg fa-fw mr2"></i>b站视频</a>
+
+
+      </div>
+      
+
+      </header>
+      <section class="post-body pt5 pb4">
+        
+
+
+
+<h1 id="设计要求">设计要求
+  <a href="#%e8%ae%be%e8%ae%a1%e8%a6%81%e6%b1%82"></a>
+</h1>
+<p>根据2013年电赛赛题 ：</p>
+<p><img src="topic_1.png" alt="Untitled"></p>
+<p><img src="topic_2.png" alt="Untitled"></p>
+
+
+
+
+<h1 id="系统方案">系统方案
+  <a href="#%e7%b3%bb%e7%bb%9f%e6%96%b9%e6%a1%88"></a>
+</h1>
+
+
+
+
+<h2 id="方案概述">方案概述
+  <a href="#%e6%96%b9%e6%a1%88%e6%a6%82%e8%bf%b0"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>采用单相全桥同步整流、boost PFC功率因素矫正电路级联。使用TL431同步整流芯片构成的全桥电路代替整流桥，降低输入电压电流波形畸变程度并提高效率；后级使用UCC28019芯片构成的boost PFC芯片。此方案电路拓扑简单，模拟 IC 控制实现高功率因数校正，但难以实现功率因素的调整。本设计还采用兼容设计，可以整流桥和TL431同步整流电路兼容。</p>
+
+
+
+
+<h2 id="系统框架">系统框架
+  <a href="#%e7%b3%bb%e7%bb%9f%e6%a1%86%e6%9e%b6"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>该系统采用 TI 公司专用 APFC 整流控制芯片 UCC28019 作为控制核心，构成电压外环和电流内环的双环控制，构建了有源功率因数校正（APFC）的高功率因数整流电源。其中，电流内环作用是使网侧交流输入电流跟踪电网电压的波形与相位；电压外环为输出直流电压控制环，外环电压调节器的输出控制内环电流调节器的增益，使输出直流电压稳定。实际测试表明，采用UCC28019 作为本系统的 APFC 芯片完全达到或超过题目要求的所有指标。</p>
+<p><img src="plan.png" alt="Untitled"></p>
+
+
+
+
+<h1 id="电路设计">电路设计
+  <a href="#%e7%94%b5%e8%b7%af%e8%ae%be%e8%ae%a1"></a>
+</h1>
+
+
+
+
+<h2 id="主电路设计">主电路设计
+  <a href="#%e4%b8%bb%e7%94%b5%e8%b7%af%e8%ae%be%e8%ae%a1"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>Boost 升压电路中的储能电感 、功率开关管 、续流二极管 、输出滤波电容  是此电路的主要元器件。当功UCC28019 芯片的 8 号脚有PWM 波形输出时，功率开关管导通，整流电路输出的电压几乎全部加在储能电感 L 两端，此时电感极性为左端正右端负，续流二极管反偏处于截止状态，电流从电源正端经储能电感和功率开关管流回电源负端，储能电感电流按线性规律上升，电感将电能转化为磁能储存起来。经过一段时间后，控制电路无PWM 波形输出，开关管截止，两端自感电势的极性变为右端正左端负，使 二极管导通，电感释放储能，储能电感电流按线性规律下降；这时 Boost 电
+路的输入电压和电感上的电压 UL 叠加起来，经续流二极管向负载供电和滤波电容充电。重复上述两种过程。</p>
+<p>可参考boost电路CCM模式下工作特点。
+该电路的优点：</p>
+<p>（1）输出电压总是高于输入电压，当功率开关管被击穿短路时，不会出现输出电压过高而损坏负载的情况。</p>
+<p>（2）升压变换器的输入电流（即 L 中的电流iL）是连续的，不是脉冲电流，因此对电源只有较小的干扰，缓解输入滤波的任务。</p>
+<p>该电路的缺点：</p>
+<p>输出侧的电流（流经 D2 的电流）是不连续的，即脉冲电流，加重了输出滤波的任务。</p>
+<p><img src="schematic_1.png" alt="Untitled"></p>
+<p>详细计算公式请参考芯片手册。</p>
+
+
+
+
+<h3 id="开关管的选择">开关管的选择
+  <a href="#%e5%bc%80%e5%85%b3%e7%ae%a1%e7%9a%84%e9%80%89%e6%8b%a9"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>电感电流最大值为7.2A，电压最大值为35V，选取开关管为SUP85N10,Vds=100V,Rds(on)=0.01,Id=85A，</p>
+
+
+
+
+<h3 id="续流二极管的选择">续流二极管的选择
+  <a href="#%e7%bb%ad%e6%b5%81%e4%ba%8c%e6%9e%81%e7%ae%a1%e7%9a%84%e9%80%89%e6%8b%a9"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>电感电流最大平均值为4.6A，选取MBR30100，Id=2*15A,V=100V,Vf=0.68V,Ifsm=350A,TJmax=150℃</p>
+
+
+
+
+<h3 id="整流桥选择">整流桥选择
+  <a href="#%e6%95%b4%e6%b5%81%e6%a1%a5%e9%80%89%e6%8b%a9"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>兼容设计 GBJ3510，1000V,Iavg=4.2A</p>
+
+
+
+
+<h3 id="电感">电感
+  <a href="#%e7%94%b5%e6%84%9f"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>铁硅铝功率电感4mH，最小电感0.1mH</p>
+<p><img src="Inductor_1.png" alt="Untitled"></p>
+<p><img src="Inductor_1.png" alt="Untitled"></p>
+
+
+
+
+<h3 id="取样电阻">取样电阻
+  <a href="#%e5%8f%96%e6%a0%b7%e7%94%b5%e9%98%bb"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>0.07Ω 2W 限流点16.429A</p>
+
+
+
+
+<h3 id="输出电容">输出电容
+  <a href="#%e8%be%93%e5%87%ba%e7%94%b5%e5%ae%b9"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>输出保持时间20ms（30V）最低7700uf 选择9400uf，输出电压纹波0.72V</p>
+<p><img src="Capacitor_out.png" alt="Untitled"></p>
+
+
+
+
+<h3 id="输入电容">输入电容
+  <a href="#%e8%be%93%e5%85%a5%e7%94%b5%e5%ae%b9"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>输入电流纹波20% 电压纹波3%</p>
+<p>2uf电容</p>
+<p><img src="Capacitor_in.png" alt="Untitled"></p>
+
+
+
+
+<h3 id="辅助电源的设计">辅助电源的设计
+  <a href="#%e8%be%85%e5%8a%a9%e7%94%b5%e6%ba%90%e7%9a%84%e8%ae%be%e8%ae%a1"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>使用模块电路，为芯片提供15V电压</p>
+
+
+
+
+<h2 id="ucc28019模块">UCC28019模块
+  <a href="#ucc28019%e6%a8%a1%e5%9d%97"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>UCC28019，此芯片振荡频率由内部固定为 65KHZ，这样可以有效的避免外界的干扰，提高振荡频率的稳定性。该芯片输出 PWM 波最大占空比为 97%，用在 BOOST 电路中能很好地进行有源功率因数校正，被校正电路功率因数趋近于 1，完全满足系统基本设计的要求。</p>
+<p>UCC28019主要特性有：
+（1）8 个引脚可以减少外围电路器件；
+（2）宽范围交流输入电压有效值（85~265 VAC）；
+（3）固定开关频率工作（65 kHz）；
+（4）最大占空比限制 98%；
+（5）输入电压欠压保护；
+（6）每周期电流峰值限制；
+（7）开环检测功能；
+（8）用户可控低功耗待机模式。</p>
+
+
+
+
+<h3 id="引脚介绍">引脚介绍
+  <a href="#%e5%bc%95%e8%84%9a%e4%bb%8b%e7%bb%8d"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h3>
+<p>脚 1（GND）：地，设备接地参考。</p>
+<p>脚 2（ICOMP）：电流环补偿，跨导电流放大器输出端。 该端对地连接一个电容可以提供电流环路的补偿， 经过该电流环可以得到检测电流的平均值。 如果该引脚的电平低于 0.6 V，那么芯片将停止工作。</p>
+<p>脚 3（ISENSE）：电感电流检测，该引脚接收电感电流检测信号并提供峰值电流限制功能。 该引脚上接收的是检测电阻上的负电压，该电压反映了电感电流的变化，引脚对地接一个 220 Ω 的电阻防止浪涌电流对芯片的损坏，对地接一个 1000 pF 的电容来提高该引脚的抗噪声能力。</p>
+<p>脚 4（VINS）：输入交流电压检测，该引脚是从整流后电压分压电阻网络接入的分压电压值。 当交
+流输入电压低于正常规定允许范围，检测该引脚的值可以实现输入电压的欠压保护。 在启动过程中，直到该引脚的电压达到 1.5 V， 芯片才开始初始化软启动过程。 当该引脚电压低于 0.8 V 时，芯片停止工作。 只有当该引脚的电压和 VSENSE 的引脚电压同时达到使能电压，芯片才开始复位工作，进行下一个软启动过程。</p>
+<p>脚 5（VCOMP）：电压误差放大器输出端。 即跨导误差放大器的输出端。 该引脚接对地接一个电阻
+电容补偿网络进行补偿 。 VCOMP 在 VINS 和VSENSE 和 VCC 同时达到它们的使能电压时，才开始从零开始一直上升到其正常输出值的 99%。 当增强动态响应装置（EDR）工作时，跨导误差放大器的跨导将增大，减少 VCOMP 的充电时间，加快动态响应。 软启动速度是由该引脚的电容大小决定。EDR 在软启动过程中是被禁止的。</p>
+<p>脚 6（VSENSE）：输出电压检测端，该引脚接到输出电压分压电阻网络得到分压电压，保证该电压围绕 5 V 的参考电压附近进行调整。 该引脚对地接一个电容以抑制高频噪声。 当 VSENSE 电压低于0.8 V 门限时， 此为睡眠模式开启，VCOMP 的电压开始减小。当电路开环故障时，芯片内部 100 nA 电流源将 VSENSE 引脚拉地。 当该引脚超过其额定电压的 105%时，输出电压过压保护启动，将开关管驱动信号关闭。 当输入电压变化或者负载变化使得输出电压减小于额定电压的 95%，那么 EDR 启动，将输出电压维持于正常值。</p>
+<p>脚 8（GATE）：栅极驱动，推挽式栅极驱动，可以驱动外部一个或者多个功率 MOSFET， 提供1.5~
+2.0 A 的驱动电流，输出电压被钳位于 12.5 V</p>
+<p>芯片外围电路参数可根据TI提供的计算书计算，在此不做过多赘述。</p>
+
+
+
+
+<h2 id="tl431整流模块">TL431整流模块
+  <a href="#tl431%e6%95%b4%e6%b5%81%e6%a8%a1%e5%9d%97"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>LT4320是理想的二极管桥式控制器，可驱动四个n沟道mosfet，支持从DC到600Hz的典型电压整流。通过最大化可用电压和降低功耗)，理想的二极管桥简化了电源设计并降低了电源成本，特别是在低压应用中。理想的二极管桥还可以消除热设计问题，并大大减少PC板面积。其内部电荷泵支持全nmos设计，从而消除了更大、更昂贵的PMOS开关。如果电源发生故障或短路，快速关断可以最大限度地减少反向电流瞬变。</p>
+<p>mos管仍使用SUP85N10</p>
+<p><img src="schematic_2.png" alt="Untitled"></p>
+
+
+
+
+<h1 id="测试结果">测试结果
+  <a href="#%e6%b5%8b%e8%af%95%e7%bb%93%e6%9e%9c"></a>
+</h1>
+<p>参考视频
+<a href="https://www.bilibili.com/video/BV1Pr4y1j74z/?spm_id_from=333.999.0.0" target="_blank" rel="noopener">【电赛准备】UCC28019功率因素校正APFC_BOOST_哔哩哔哩_bilibili</a></p>
+<p>视频中效率93.5% 功率因素0.972 电压精度0.06%  负载电压调整率0.1% 电压调整率0.05%</p>
+<p>非最终版本，由于Icomp引脚参数设置错误，效率和功率因素更好</p>
+<!-- 
+原文例子学习
+*— [Chris House, A Complete Guide to CSS Grid Layout](http://chris.house/blog/a-complete-guide-css-grid-layout/)* [^1]           ##这个角标1
+
+---
+##标题  title后面意义未知不显示
+### <dfn title="Ermahgerd is a humorous version of the phrase oh my god, written as though pronounced with a heavy influence of extra Rs. It's meant to imitate the sound of someone speaking through a retainer">ERMAHGERD</dfn>
+
+
+
+> ##### CSS Grid Layout Module
+>
+> This CSS module definesen of a grid container can be positioned into arbitrary slots in a predefined flexible or fixed-size layout grid.
+>
+> — _W3C_
+
+CSS Grid is a total game changer, IMHO. Compared to the bottomless pit uch. I mean this is really the meat of the deal:
+
+```css
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(3, auto);
+}
+```
+
+
+
+[^1]: The original article cited here is now updated and maintained by the staff over at CSS-Tricks. Bookmark their version if you want to dive in and learn about CSS Grid: [A Complete Guide to Grid](https://css-tricks.com/snippets/css/complete-guide-grid/) -->
+
+        
+        <details closed class="f6 fw7 input-reset">
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Posted on:</dt>
+    <dd class="fw5 ml0">July 25, 2022</dd>
+  </dl>
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Length:</dt>
+    <dd class="fw5 ml0">1 minute read, 196 words</dd>
+  </dl>
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Categories:</dt>
+    <dd class="fw5 ml0"> <a href="/categories/%E7%94%B5%E5%8A%9B%E7%94%B5%E5%AD%90">电力电子</a>  <a href="/categories/%E7%94%B5%E5%AD%90">电子</a>  <a href="/categories/%E6%95%B4%E6%B5%81%E5%99%A8">整流器</a>  <a href="/categories/%E5%8A%9F%E7%8E%87%E5%9B%A0%E7%B4%A0">功率因素</a> </dd>
+  </dl>
+  
+  
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Tags:</dt>
+    <dd class="fw5 ml0"> <a href="/tags/hustle-site">hustle-site</a> </dd>
+  </dl>
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">See Also:</dt>
+    
+    <dd class="fw5 ml0"><a href="/project/single-phase_ac_electronic_load/">单相交流电子负载</a></dd>
+    
+    <dd class="fw5 ml0"><a href="/project/wpt/">磁耦合谐振式无线电能传输</a></dd>
+    
+  </dl>
+</details>
+
+      </section>
+      <footer class="post-footer">
+        <div class="post-pagination dt w-100 mt4 mb2">
+  
+  
+    <a class="prev dtc pr2 tl v-top fw6"
+    href="/project/single-phase_ac_electronic_load/">&larr; 单相交流电子负载</a>
+  
+  
+  
+    <a class="next dtc pl2 tr v-top fw6"
+    href="/project/wpt/">磁耦合谐振式无线电能传输 &rarr;</a>
+  
+</div>
+
+      </footer>
+    </article>
+    
+  </section>
+</main>
+<footer class="site-footer pv4 bt b--transparent ph5" role="contentinfo">
+  <nav class="db dt-l w-100">
+    <p class="site-copyright f7 db dtc-l v-mid w-100 w-33-l tc tl-l pv2 pv0-l mv0 lh-copy">
+      苏ICP备2022047054号-1
+      <span class="middot-divider"></span>
+      Made with <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/hugo-apero/" rel="dct:source">Hugo Apéro</a></span>.
+      <br />
+      
+Based on <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/formspree/blogophonic-hugo" rel="dct:source">Blogophonic</a></span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://formspree.io" property="cc:attributionName" rel="cc:attributionURL">Formspree</a>.
+    </p>
+    
+    <div class="site-social-links db dtc-l v-mid w-100 w-33-l tc pv2 pv0-l mv0">
+      <div class="social-icon-links" aria-hidden="true">
+  
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="http://wpa.qq.com/msgrd?v=3&amp;uin=1163245390&amp;site=qq&amp;menu=yes" title="qq" target="_blank" rel="me noopener">
+      <i class="fab fa-qq fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://space.bilibili.com/49891326?" title="tv" target="_blank" rel="me noopener">
+      <i class="fas fa-tv fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://www.douyin.com/user/MS4wLjABAAAATL8RrgaFMVASPls1vY1erRumqArbTg1t4IOaNbNdUpbRJ8o8KVMAdzIiEl5uKWYk" title="tiktok" target="_blank" rel="me noopener">
+      <i class="fab fa-tiktok fa-lg fa-fw"></i>
+    </a>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://github.com/eeeHustle" title="github" target="_blank" rel="me noopener">
+      <i class="fab fa-github fa-lg fa-fw"></i>
+    </a>
+  
+</div>
+
+    </div>
+    
+    <div class="site-links f6 db dtc-l v-mid w-100 w-67-l tc tr-l pv2 pv0-l mv0">
+      
+    </div>
+  </nav>
+  
+    <script>
+
+    var i, text, code, codes = document.getElementsByTagName('code');
+    for (let i = 0; i < codes.length;) {
+      code = codes[i];
+      if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+        text = code.textContent;
+        if (/^\$[^$]/.test(text) && /[^$]\$$/.test(text)) {
+          text = text.replace(/^\$/, '\\(').replace(/\$$/, '\\)');
+          code.textContent = text;
+        }
+        if (/^\\\((.|\s)+\\\)$/.test(text) ||
+            /^\\\[(.|\s)+\\\]$/.test(text) ||
+            /^\$(.|\s)+\$$/.test(text) ||
+            /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+          code.outerHTML = code.innerHTML;  
+          continue;
+        }
+      }
+      i++;
+    }
+</script>
+
+  
+    
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+
+
+    
+  
+  
+</footer>
+
+      </div>
+    </body>
+</html>
