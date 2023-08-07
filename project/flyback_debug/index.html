@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="generator" content="Hugo 0.106.0">
-<title>电子 | Hustle</title>
+<title>反激电源故障分析 | Hustle</title>
 
 
 <meta property="twitter:site" content="@apreshill">
@@ -24,33 +24,35 @@
   
     
   
-<meta name="description" content="A modern, beautiful, and easily configurable blog theme for Hugo.">
+<meta name="description" content="Analysis of flyback power failure">
 
 
 <meta property="og:site_name" content="Hustle">
-<meta property="og:title" content="电子 | Hustle">
-<meta property="og:description" content="A modern, beautiful, and easily configurable blog theme for Hugo." />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="/categories/%E7%94%B5%E5%AD%90/" />
+<meta property="og:title" content="反激电源故障分析 | Hustle">
+<meta property="og:description" content="Analysis of flyback power failure" />
+<meta property="og:type" content="page" />
+<meta property="og:url" content="/project/flyback_debug/" />
 <meta property="og:locale" content="zh">
 
 
 
 
     
-        <meta property="og:image" content="/img/papillons.jpg" >
+        <meta property="og:image" content="/project/sidebar-listing.jpg" >
         <meta property="twitter:card" content="summary_large_image">
-        <meta name="twitter:image" content="/img/papillons.jpg" >
+        <meta name="twitter:image" content="/project/sidebar-listing.jpg" >
     
-  <meta itemprop="name" content="电子">
-<meta itemprop="description" content="A modern, beautiful, and easily configurable blog theme for Hugo.">
+    
+  <meta itemprop="name" content="反激电源故障分析">
+<meta itemprop="description" content=" "><meta itemprop="datePublished" content="2021-07-25T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2021-07-25T00:00:00+00:00" />
+<meta itemprop="wordCount" content="0">
+<meta itemprop="keywords" content="hustle-site," />
   
   
   <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
   <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
   <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
-  
-    <link rel="alternate" type="application/rss+xml" href="/categories/%E7%94%B5%E5%AD%90/index.xml" title="Hustle" />
   
   
   <link rel="stylesheet" href="/style.main.min.36233a39979933db8877785b1879dd1ee29d2f4bf092a7566e716b04552caf2c.css" integrity="sha256-NiM6OZeZM9uId3hbGHndHuKdL0vwkqdWbnFrBFUsryw=" media="screen">
@@ -62,7 +64,7 @@
   <script src="/main.min.62a7f7a2d29d031897400ce35bc7c72bc953d24fa1193bee8f97864113de8c74.js" type="text/javascript"></script>
 </head>
 <body>
-      <div class="grid-container">
+      <div class="grid-container single">
 <header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
   <nav class="site-nav db dt-l w-100" role="navigation">
     <a class="site-brand db dtc-l v-mid link no-underline w-100 w-33-l tc tl-l" href="/" title="Home">
@@ -83,196 +85,127 @@
         
         
         
-      <a class="link f6 f5-l dib pv1 ph2 " href="/project/" title="Project">项目</a>
+      <a class="link f6 f5-l dib pv1 ph2 active" href="/project/" title="Project">项目</a>
       
       
     </div>
   </nav>
 </header>
 
-
 <main class="page-main pa4" role="main">
-  <section class="blog-intro mw7 center mb5">
-    <h1 class="f2 f1-ns fw4 lh-solid tc center i">电子</h1>
-    <p class="f6 f5-ns measure lh-copy tc center"></p>
-  </section>
-  <section class="blog-content mw7 center">
-  
+  <section class="page-content mw7 center">
+    <article class="post-content pa0 ph4-l">
+      <header class="post-header">
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">反激电源故障分析</h1>
+        <h4 class="f4 mt0 mb4 lh-title measure">Analysis of flyback power failure</h4>
+        <p class="f6 measure lh-copy mv1">By Hustle in <a href="/categories/%E7%94%B5%E5%8A%9B%E7%94%B5%E5%AD%90">电力电子</a>  <a href="/categories/%E7%94%B5%E5%AD%90">电子</a>  <a href="/categories/dc-dc">DC-DC</a> </p>
+        <p class="f7 db mv0 ttu">July 25, 2021</p>
+
+      
+      <div class="ph0 pt5">
+        
     
-                               
-     
-     
-<article class="mv4 mv5-l bb">
-
-  
-  
-  <div class="measure-wide center mb4 mb5-l">
-    <header>
-      <h1 class="f3 mt0 mb2 lh-title underline fw4"><a href="/project/single-phase_ac_electronic_load/" class="db">单相交流电子负载</a></h1>
-      
-    </header>
-      
-      <p class="lh-copy mb4">为实现单相交流电子负载的设计要求，本设计给出了以单相整流器与单相逆变器级联为主电路拓扑，以 TMS320F28335 为主控的总体方案。其中以 PWM整流器为负载特性模拟单元，以单相逆变器为能量反馈单元。本系统的设计及算法核心在于利用锁相环跟踪锁定输入电压相位，通过移相改变锁相环相角以及 PI 控制算法调节电流环，使输入侧的电流与电压的相位角差值精准可控，能够得到需要的任意角度进而实现对不同特性负载的模拟。最终通过仿真验证、硬件设计、软件调试和系统联调，对所设计的单相交流电子负载电路和控制方法进行了测试和验证，测试结果表明本方案的电子负载系统的输入电压电流能够达到题目要求，同时，系统能够有效模拟不同特性负载。</p>
-    <footer>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-  
     
-                               
-     
-     
-<article class="mv4 mv5-l bb">
-
-  
-  
-  <div class="measure-wide center mb4 mb5-l">
-    <header>
-      <h1 class="f3 mt0 mb2 lh-title underline fw4"><a href="/project/pfc_ucc28019&#43;lt4320/" class="db">基于UCC28019的高功率因素电源</a></h1>
-      
-    </header>
-      
-      <p class="lh-copy mb4">本设计采用 TI 公司专用 PFC 整流控制芯片 UCC28019 作为控制核心，构成电压外环和电流内环的双环控制，构建了有源功率因数校正的高功率因数整流电源。其中，电流内环作用是使网侧交流输入电流跟踪电网电压的波形与相位；电压外环为输出直流电压控制环，外环电压调节器的输出控制内环电流调节器的增益，使输出直流电压稳定。</p>
-    <footer>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-  
     
-                               
-     
-     
-<article class="mv4 mv5-l bb">
-
-  
-  
-  <div class="measure-wide center mb4 mb5-l">
-    <header>
-      <h1 class="f3 mt0 mb2 lh-title underline fw4"><a href="/project/wpt/" class="db">磁耦合谐振式无线电能传输</a></h1>
       
-    </header>
-      
-      <p class="lh-copy mb4">在当今社会努力推动绿色能源发展的浪潮中，电动汽车扮演着减少环境污染，发展绿色出行的重要角色。同时，为了保证电动汽车充电的安全性、灵活性、快速性和实时性要求，大功率、高效率的电动汽车无线充电技术应运而生，其正朝着产业化方向快速发展</p>
-    <footer>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-  
     
-                               
-     
-     
-<article class="mv4 mv5-l bb">
-
-  
-  
-  <div class="measure-wide center mb4 mb5-l">
-    <header>
-      <h1 class="f3 mt0 mb2 lh-title underline fw4"><a href="/project/car_supply/" class="db">智能小车电源模块</a></h1>
-      
-    </header>
-      
-      <p class="lh-copy mb4">智能小车电源模块</p>
-    <footer>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-  
     
-                               
-     
-     
-<article class="mv4 mv5-l bb">
-
-  
-  
-  <div class="measure-wide center mb4 mb5-l">
-    <header>
-      <h1 class="f3 mt0 mb2 lh-title underline fw4"><a href="/project/flyback_debug/" class="db">反激电源故障分析</a></h1>
-      
-    </header>
-      
-      <p class="lh-copy mb4">反激电源故障分析</p>
-    <footer>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-  
     
-                               
-     
-     
-<article class="mv4 mv5-l bb">
-
-  
-  
-  <div class="measure-wide center mb4 mb5-l">
-    <header>
-      <h1 class="f3 mt0 mb2 lh-title underline fw4"><a href="/project/pwm_rectifier/" class="db">单相PWM整流器</a></h1>
-      
-    </header>
-      
-      <p class="lh-copy mb4">单相PWM整流器</p>
-    <footer>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-  
     
-                               
-     
-     
-<article class="mv4 mv5-l bb">
+    
+      
+      
+  <a class="btn-links mr2 ba dib" href="https://scholar.google.com.hk/scholar?hl=zh-CN&amp;as_sdt=0%2C5&amp;q=%E5%8F%8D%E6%BF%80%E7%94%B5%E6%BA%90&amp;btnG=" target="_blank" rel="noopener"><i class="fab fa-google fa-lg fa-fw mr2"></i>谷歌学术</a>
 
-  
-  
-  <div class="measure-wide center mb4 mb5-l">
-    <header>
-      <h1 class="f3 mt0 mb2 lh-title underline fw4"><a href="/project/diy_reflow/" class="db">DIY回流焊炉</a></h1>
-      
-    </header>
-      
-      <p class="lh-copy mb4">DIY回流焊炉</p>
-    <footer>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
 
+      </div>
+      
+
+      </header>
+      <section class="post-body pt5 pb4">
+        <!-- 
+原文例子学习
+*— [Chris House, A Complete Guide to CSS Grid Layout](http://chris.house/blog/a-complete-guide-css-grid-layout/)* [^1]           ##这个角标1
+
+---
+##标题  title后面意义未知不显示
+### <dfn title="Ermahgerd is a humorous version of the phrase oh my god, written as though pronounced with a heavy influence of extra Rs. It's meant to imitate the sound of someone speaking through a retainer">ERMAHGERD</dfn>
+
+
+
+> ##### CSS Grid Layout Module
+>
+> This CSS module definesen of a grid container can be positioned into arbitrary slots in a predefined flexible or fixed-size layout grid.
+>
+> — _W3C_
+
+CSS Grid is a total game changer, IMHO. Compared to the bottomless pit uch. I mean this is really the meat of the deal:
+
+```css
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(3, auto);
+}
+```
+
+
+
+[^1]: The original article cited here is now updated and maintained by the staff over at CSS-Tricks. Bookmark their version if you want to dive in and learn about CSS Grid: [A Complete Guide to Grid](https://css-tricks.com/snippets/css/complete-guide-grid/) -->
+
+        
+        <details closed class="f6 fw7 input-reset">
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Posted on:</dt>
+    <dd class="fw5 ml0">July 25, 2021</dd>
+  </dl>
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Length:</dt>
+    <dd class="fw5 ml0">0 minute read, 0 words</dd>
+  </dl>
   
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Categories:</dt>
+    <dd class="fw5 ml0"> <a href="/categories/%E7%94%B5%E5%8A%9B%E7%94%B5%E5%AD%90">电力电子</a>  <a href="/categories/%E7%94%B5%E5%AD%90">电子</a>  <a href="/categories/dc-dc">DC-DC</a> </dd>
+  </dl>
+  
+  
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">Tags:</dt>
+    <dd class="fw5 ml0"> <a href="/tags/hustle-site">hustle-site</a> </dd>
+  </dl>
+  
+  <dl class="f6 lh-copy">
+    <dt class="fw7">See Also:</dt>
+    
+    <dd class="fw5 ml0"><a href="/project/single-phase_ac_electronic_load/">单相交流电子负载</a></dd>
+    
+    <dd class="fw5 ml0"><a href="/project/pfc_ucc28019&#43;lt4320/">基于UCC28019的高功率因素电源</a></dd>
+    
+    <dd class="fw5 ml0"><a href="/project/wpt/">磁耦合谐振式无线电能传输</a></dd>
+    
+  </dl>
+</details>
+
+      </section>
+      <footer class="post-footer">
+        <div class="post-pagination dt w-100 mt4 mb2">
+  
+  
+    <a class="prev dtc pr2 tl v-top fw6"
+    href="/project/pwm_rectifier/">&larr; 单相PWM整流器</a>
+  
+  
+  
+    <a class="next dtc pl2 tr v-top fw6"
+    href="/project/car_supply/">智能小车电源模块 &rarr;</a>
+  
+</div>
+
+      </footer>
+    </article>
+    
   </section>
 </main>
 <footer class="site-footer pv4 bt b--transparent ph5" role="contentinfo">

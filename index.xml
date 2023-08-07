@@ -289,6 +289,42 @@ $E$AS热量造成的失效 （雪崩能量）
     </item>
     
     <item>
+      <title>DIY回流焊炉</title>
+      <link>/project/diy_reflow/</link>
+      <pubDate>Sun, 25 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/project/diy_reflow/</guid>
+      <description> </description>
+    </item>
+    
+    <item>
+      <title>单相PWM整流器</title>
+      <link>/project/pwm_rectifier/</link>
+      <pubDate>Sun, 25 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/project/pwm_rectifier/</guid>
+      <description> </description>
+    </item>
+    
+    <item>
+      <title>反激电源故障分析</title>
+      <link>/project/flyback_debug/</link>
+      <pubDate>Sun, 25 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/project/flyback_debug/</guid>
+      <description> </description>
+    </item>
+    
+    <item>
+      <title>智能小车电源模块</title>
+      <link>/project/car_supply/</link>
+      <pubDate>Sun, 25 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/project/car_supply/</guid>
+      <description> </description>
+    </item>
+    
+    <item>
       <title>A seedling</title>
       <link>/talk/seedling/</link>
       <pubDate>Mon, 13 Jan 2020 14:15:59 -0600</pubDate>

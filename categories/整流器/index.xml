@@ -62,5 +62,14 @@ PS：系统启动时，需先不控整流给直流母线充电
 输出电容 输出保持时间20ms（30V）最低7700uf 选择9400uf，输出电压纹波0.72V</description>
     </item>
     
+    <item>
+      <title>单相PWM整流器</title>
+      <link>/project/pwm_rectifier/</link>
+      <pubDate>Sun, 25 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/project/pwm_rectifier/</guid>
+      <description> </description>
+    </item>
+    
   </channel>
 </rss>
