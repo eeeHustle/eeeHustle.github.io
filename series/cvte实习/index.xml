@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CVTE实习 on Hustle</title>
+    <link>/series/cvte%E5%AE%9E%E4%B9%A0/</link>
+    <description>Recent content in CVTE实习 on Hustle</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>苏ICP备2022047054号-1</copyright>
+    <lastBuildDate>Wed, 16 Aug 2023 00:00:00 +0000</lastBuildDate><atom:link href="/series/cvte%E5%AE%9E%E4%B9%A0/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>435W TV电源板</title>
+      <link>/blog/cvte/pfc&#43;llc/introduction/</link>
+      <pubDate>Wed, 16 Aug 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/cvte/pfc&#43;llc/introduction/</guid>
+      <description> </description>
+    </item>
+    
+    <item>
+      <title>Boost PFC</title>
+      <link>/blog/cvte/boost_pfc/</link>
+      <pubDate>Wed, 16 Aug 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/cvte/boost_pfc/</guid>
+      <description> </description>
+    </item>
+    
+    <item>
+      <title>电源测试项</title>
+      <link>/blog/cvte/test/</link>
+      <pubDate>Wed, 16 Aug 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/cvte/test/</guid>
+      <description> </description>
+    </item>
+    
+    <item>
+      <title>CVTE实习</title>
+      <link>/blog/cvte/</link>
+      <pubDate>Wed, 16 Aug 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/cvte/</guid>
+      <description>** No content below YAML for the series _index. This file is a leaf bundle, and provides settings for the listing page layout and sidebar content.**</description>
+    </item>
+    
+  </channel>
+</rss>

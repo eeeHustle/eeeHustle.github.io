@@ -65,8 +65,8 @@ PS：系统启动时，需先不控整流给直流母线充电
 综上所述，因为本系统对控制的灵活性要求高，要实现稳定输入、系统整体高效率与交流输入功率因数精准可调，模拟控制较难实现。方案一使用锁相环能够跟踪锁定输入电压相位，对输入交流电流的瞬时值进行闭环控制，使输入电流与电压同相实现功率因数校正，并且能够改变电压电流的相角差来模拟感性容性负载，但算法难度较大。方案二采用不控整流无法实现功率因数调整。综合考虑题目要求与准备情况，选用方案一。
 系统框架 系统以单相 PWM 整流电路与单相逆变电路为主电路拓扑结构，以TMS320F28335 为主控。系统框架如图 1所示。交流输入电压为 30V，输入电流为 2A, PWM 整流器为负载特性模拟单元，逆变器为能量反馈单元。本设计的算法核心在于利用锁相环跟踪锁定输入电压相位，并且通过移相以及 PI 控制算法调节电流环，使输入侧的电流与电压的相位角差值精准可控，能够得到需要的任意角度进而实现对不同特性负载的模拟。
 理论分析与计算 能量流动分析 逆变单元功率分析 给定功率因数时，整流单元供给直流侧的功率 P1必然恒定，同时逆变单元采用 SPWM 调制，忽略死区效应以及滤波器压降，则负载上的输出电压可近似为
-其中 m 为 SPWM 的调制度，则负载 R 上消耗的功率为"><meta itemprop="datePublished" content="2022-08-25T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-08-25T00:00:00+00:00" />
+其中 m 为 SPWM 的调制度，则负载 R 上消耗的功率为"><meta itemprop="datePublished" content="2023-08-01T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2023-08-01T00:00:00+00:00" />
 <meta itemprop="wordCount" content="157"><meta itemprop="image" content="/project/single-phase_ac_electronic_load/featured.jpg">
 <meta itemprop="keywords" content="hustle-site," />
   
@@ -120,7 +120,7 @@ PS：系统启动时，需先不控整流给直流母线充电
         <h1 class="f1 lh-solid measure-narrow mb3 fw4">单相交流电子负载</h1>
         <h4 class="f4 mt0 mb4 lh-title measure">single-phase AC electronic load</h4>
         <p class="f6 measure lh-copy mv1">By Hustle in <a href="/categories/%E7%94%B5%E5%8A%9B%E7%94%B5%E5%AD%90">电力电子</a>  <a href="/categories/%E7%94%B5%E5%AD%90">电子</a>  <a href="/categories/%E6%95%B4%E6%B5%81%E5%99%A8">整流器</a>  <a href="/categories/%E9%80%86%E5%8F%98%E5%99%A8">逆变器</a>  <a href="/categories/%E5%8A%9F%E7%8E%87%E5%9B%A0%E7%B4%A0">功率因素</a> </p>
-        <p class="f7 db mv0 ttu">August 25, 2022</p>
+        <p class="f7 db mv0 ttu">August 1, 2023</p>
 
       
       <div class="ph0 pt5">
@@ -399,7 +399,7 @@ CSS Grid is a total game changer, IMHO. Compared to the bottomless pit uch. I me
         <details closed class="f6 fw7 input-reset">
   <dl class="f6 lh-copy">
     <dt class="fw7">Posted on:</dt>
-    <dd class="fw5 ml0">August 25, 2022</dd>
+    <dd class="fw5 ml0">August 1, 2023</dd>
   </dl>
   <dl class="f6 lh-copy">
     <dt class="fw7">Length:</dt>
@@ -421,9 +421,9 @@ CSS Grid is a total game changer, IMHO. Compared to the bottomless pit uch. I me
   <dl class="f6 lh-copy">
     <dt class="fw7">See Also:</dt>
     
-    <dd class="fw5 ml0"><a href="/project/pfc_ucc28019&#43;lt4320/">基于UCC28019的高功率因素电源</a></dd>
-    
     <dd class="fw5 ml0"><a href="/project/wpt/">磁耦合谐振式无线电能传输</a></dd>
+    
+    <dd class="fw5 ml0"><a href="/project/pfc_ucc28019&#43;lt4320/">基于UCC28019的高功率因素电源</a></dd>
     
     <dd class="fw5 ml0"><a href="/project/car_supply/">智能小车电源模块</a></dd>
     
@@ -438,7 +438,7 @@ CSS Grid is a total game changer, IMHO. Compared to the bottomless pit uch. I me
   
   
     <a class="next dtc pl2 tr v-top fw6"
-    href="/project/pfc_ucc28019&#43;lt4320/">基于UCC28019的高功率因素电源 &rarr;</a>
+    href="/project/wpt/">磁耦合谐振式无线电能传输 &rarr;</a>
   
 </div>
 
